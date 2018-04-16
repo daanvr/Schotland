@@ -1,0 +1,169 @@
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
+<link rel="stylesheet" type="text/css" href="style.css">
+<div class="fakebody">
+<nav id="menu"><p>Scans:</p></nav>
+<div id='map'></div>
+<div class='map-overlay-yearsliderbox' id='yearsliderbox'>
+        <input  id='slider' class='slider' type='range' min='1960' max='2016' step='1' value='2002'/>        
+    </div>
+<div class='map-overlay-infobox'>
+    <div class="content_menu">
+        <a href="http://www.mapofhumanity.org/" target="_blank"><button type="button" class="content_menu_btn"  >Support us</button></a>
+        <button type="button" class="content_menu_btn" onclick="document.getElementById('youtube_demo_background').style.display = 'inline'">Demo video</button>
+        <button type="button" class="content_menu_btn" onclick="document.getElementById('contribute_iframe_background').style.display = 'inline'">Contribure</button>
+    </div>
+        <div class='map-overlay-infobox-content'>
+                  <div class='infobox_name_div'>
+                      <p id="infobox_name">UT Campus Prototype</p>
+                  </div>
+            <div class='infobox_img_div'>
+                <a id="infobox_imgurl" href="" target="_blank"><img id="infobox_img" src="" style="max-width: 100%; max-height: 100%;"></a>
+            </div>
+    
+            <div class='infobox_date_div'>
+                <p id="infobox_date" style='text-align: center;'></p>
+            </div>
+            <div class='infobox_info_div'>
+                <p id="infobox_info">
+                 For any questions or bugs feel free to use the <a href="https://app.purechat.com/w/MapofHumanity" style="text-decoration: underline;">chat box</a> or <a href="mailto:daan@mapofhumanity.org?Subject=I%20was%20looking%20at%20mapofhumanity.org/prototype" style="text-decoration: underline;">email me</a>.
+                </p>
+            </div>
+        </div>
+        <div class='infobox_howto_div'></div>
+    </div>
+  <div class='map-overlay-yearbox'> <label id='yearlable'></label> </div>
+  
+  <div class='map-overlay-eventbox' id='map-overlay-eventbox'> <label id='eventlable'></label> </div>
+    
+  <div id="youtube_demo_background"> <button id="youtube_demo_background_btn" type="button" onclick="document.getElementById('youtube_demo_background').style.display = 'none'"></button>
+        <div class='video-container'> 
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/s80a45d8Ids" frameborder="0" allowfullscreen></iframe> 
+        </div>  
+        <button type="button" class="done_btn" onclick="document.getElementById('youtube_demo_background').style.display = 'none'">Done</button>
+    </div>
+  <div id="contribute_iframe_background"> <button id="contribute_iframe_background_btn" type="button" onclick="ConfirmContributionFunction()"></button>
+    <div>
+      <iframe id="contribute_iframe" src="https://goo.gl/forms/ds2Hiqbr2O80l2p72"></iframe>
+      <button type="button" class="done_btn" onclick="ConfirmContributionFunction()">Contribution is done</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+//loads the map
+$('#map-overlay-eventbox').hide();
+mapboxgl.accessToken = 'pk.eyJ1IjoiZGFhbnZyIiwiYSI6ImNpdTJmczN3djAwMHEyeXBpNGVndWtuYXEifQ.GYZf7r9gTfQL3W-GpmmJ3A';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/daanvr/cjg2nbkj61twz2rruflshmfeo',
+    center: [-4.337799, 57.157900],
+    zoom: 7,
+    bearing: 0,
+    pitch: 0,
+    //maxBounds: [[6.805686225891112, 52.223266707775876], [6.891775856018066, 52.264813883912355]],
+    //minZoom: 14
+});
+
+//this makes map features clickable and puts the data in theinfo box
+map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, {});
+    if (!features.length) {return;}
+    var feature = features[0];
+    
+    document.getElementById('infobox_img').setAttribute('src', feature.properties.img);
+    document.getElementById('infobox_imgurl').setAttribute('href', feature.properties.imgurl);
+    document.getElementById('infobox_name').innerHTML = (feature.properties.name);
+    document.getElementById('infobox_info').innerHTML = (feature.properties.info);
+    document.getElementById('infobox_date').innerHTML = (feature.properties.start_date + " - " +feature.properties.end_date);
+});
+
+//pointer changes
+map.addControl(new mapboxgl.NavigationControl());
+// map.on('load', function () {
+//     // Change the cursor to a pointer when the mouse is over the places layer.
+//     map.on('mouseenter', 'pois', function () {
+//         map.getCanvas().style.cursor = 'pointer';
+//     });
+//     // Change it back to a pointer when it leaves.
+//     map.on('mouseleave', 'pois', function () {
+//         map.getCanvas().style.cursor = '';
+//     });
+// });
+
+//creates Filters used by time selection to only keep data from the relevant year
+// $(document).ready(function() {
+//     console.log("ready!");
+//     function filterBy(year) {
+//         var yearvar = document.getElementById("slider").value;
+//         var yearplus1N = Number(yearvar) + 1;
+//         var yearminus1N = Number(yearvar) - 1;
+//         var yearplus2N = Number(yearvar) + 2;
+//         var yearminus2N = Number(yearvar) - 2;
+//         var yearplus1 = yearplus1N.toString();
+//         var yearminus1 = yearminus1N.toString();
+//         var yearplus2 = yearplus2N.toString();
+//         var yearminus2 = yearminus2N.toString();
+//         map.setFilter('buildingslayer', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);            //Buildings timeline
+//         map.setFilter('buildingslayer_name', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);            //Buildings timeline
+//         map.setFilter('buildingslayer_shadow', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);       //Buildings shadow timeline
+//         map.setFilter('waterlayer', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);                //Water timeline
+//         map.setFilter('waysdataset', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);               //Roads timeline
+//         map.setFilter('waysdataset_shadow', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);          //Roads timeline
+//         map.setFilter('pois', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);                      //Roads timeline
+//         map.setFilter('sports', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);                      //Roads timeline
+//         map.setFilter('sports_name', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);                      //Roads timeline
+//         map.setFilter('forestcampus', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);                      //Roads timeline
+//         map.setFilter('photos', [ "any", ['==', 'date', year], ['==', 'date', yearplus1], ['==', 'date', yearminus1], ['==', 'date', yearplus2], ['==', 'date', yearminus2]]);                      //photo_pois timeline
+        
+//         // Set the label in the top middle to correct content based on time selection
+//         document.getElementById('yearlable').textContent = year;
+//         if (year == 1960) {
+//           document.getElementById('eventlable').textContent = "1960: The Drienerlo estate";
+//           $('#map-overlay-eventbox').show(); };
+//         if (year == 1961) {
+//           document.getElementById('eventlable').textContent = "1961: Official announcement of the THT";
+//           $('#map-overlay-eventbox').show(); };
+//         if (year == 1962) {
+//           document.getElementById('eventlable').textContent = "1962: Start of the construction works";
+//           $('#map-overlay-eventbox').show(); };
+//         if (year == 1964) {
+//           document.getElementById('eventlable').textContent = "1964: The first students arrive!";
+//           $('#map-overlay-eventbox').show(); };
+//         if (year == 1986) {
+//           document.getElementById('eventlable').textContent = "1986: The THT becomes the University of Twente";
+//           $('#map-overlay-eventbox').show(); };
+//         if (year == 2002) {
+//           document.getElementById('eventlable').textContent = "2002: Fire in the Cubicus destroying the east wing";
+//           $('#map-overlay-eventbox').show(); };
+//         if (year != 1986 && year != 1961 && year != 1962 && year != 1964 && year != 2002)  {
+//           document.getElementById('eventlable').textContent = "";
+//           $('#map-overlay-eventbox').hide(); };
+//     }
+    
+//     //initiates map. select the first year and starts animation to zome to the starting position.
+//     map.on('load', function test() {
+//         //Set filter to first year of the year
+//         //filterBy("" + 2002 + "");
+//         //This has nowbeen doen earlyer in the code
+//         filterBy("" + 2002 + "");
+//         document.getElementById('slider').addEventListener('input', function(e) {
+//             var year = "" + parseInt(e.target.value, 10) + "";
+//             filterBy(year);
+//         });
+//             map.flyTo({
+//         center: [6.85220718383789, 52.24346350501319],
+//         zoom: 14.3,
+//         pitch: 0,
+//         bearing: 14,
+//         speed: 0.4, // make the flying slow
+//         curve: 1, // change the speed at which it zooms out
+//     });
+
+//     });
+// });
+</script> 
