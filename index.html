@@ -10,49 +10,41 @@
 
 <body>
 <div class="fakebody">
-<nav id="menu"><p>Scans:</p></nav>
 <div id='map'></div>
 <div class='map-overlay-yearsliderbox' id='yearsliderbox'>
         <input  id='slider' class='slider' type='range' min='1960' max='2016' step='1' value='2002'/>        
     </div>
 <div class='map-overlay-infobox'>
+<!-- 
     <div class="content_menu">
-<!--         <a href="http://www.mapofhumanity.org/" target="_blank"><button type="button" class="content_menu_btn"  >Support us</button></a>
+        <a href="http://www.mapofhumanity.org/" target="_blank"><button type="button" class="content_menu_btn"  >Support us</button></a>
         <button type="button" class="content_menu_btn" onclick="document.getElementById('youtube_demo_background').style.display = 'inline'">Demo video</button>
         <button type="button" class="content_menu_btn" onclick="document.getElementById('contribute_iframe_background').style.display = 'inline'">Contribure</button>
- -->    </div>
-        <div class='map-overlay-infobox-content'>
-                  <div class='infobox_name_div'>
-                      <p id="infobox_name">Tonny's reis door Schotland</p>
-                  </div>
-            <div class='infobox_img_div'>
-                <a id="infobox_imgurl" href="" target="_blank"><img id="infobox_img" src="" style="max-width: 100%; max-height: 100%;"></a>
-            </div>
-    
-            <div class='infobox_date_div'>
-                <p id="infobox_date" style='text-align: center;'></p>
-            </div>
-            <div class='infobox_info_div'>
-                <p id="infobox_info">Dit is een interactive kaart van Tonny's reis door Schotland, in April van 2018, ten eren van haar 60ste verjaardag. Deze reis is gefinancierd door familie &amp vrienden als een cadeau voor deze heugelijke mijlpaal.</p>
-            </div>
-        </div>
-        <div class='infobox_howto_div'></div>
+    </div> -->
+
+    <div class='map-overlay-infobox-content'>
+        <div class='infobox_name_div'><p id="infobox_name">Tonny's reis door Schotland</p></div>
+        <div class='infobox_img_div'><img id="infobox_img" src="" style="max-width: 100%; max-height: 100%;"></div>    
+        <div class='infobox_info_div'><p id="infobox_info">Dit is een interactive kaart van Tonny's reis door Schotland, in April van 2018, ten eren van haar 60ste verjaardag. Deze reis is gefinancierd door familie &amp vrienden als een cadeau voor deze heugelijke mijlpaal.</p></div>
     </div>
-  <div class='map-overlay-yearbox'> <label id='yearlable'></label> </div>
+</div>
+
+<div class='map-overlay-yearbox'> <label id='yearlable'></label></div>
   
-  <div class='map-overlay-eventbox' id='map-overlay-eventbox'> <label id='eventlable'></label> </div>
+<div class='map-overlay-eventbox' id='map-overlay-eventbox'> <label id='eventlable'></label> </div>
     
-  <div id="youtube_demo_background"> <button id="youtube_demo_background_btn" type="button" onclick="document.getElementById('youtube_demo_background').style.display = 'none'"></button>
-        <div class='video-container'> 
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/s80a45d8Ids" frameborder="0" allowfullscreen></iframe> 
-        </div>  
-        <button type="button" class="done_btn" onclick="document.getElementById('youtube_demo_background').style.display = 'none'">Done</button>
-    </div>
-  <div id="contribute_iframe_background"> <button id="contribute_iframe_background_btn" type="button" onclick="ConfirmContributionFunction()"></button>
-    <div>
-      <iframe id="contribute_iframe" src="https://goo.gl/forms/ds2Hiqbr2O80l2p72"></iframe>
-      <button type="button" class="done_btn" onclick="ConfirmContributionFunction()">Contribution is done</button>
-    </div>
+<div id="youtube_demo_background"> <button id="youtube_demo_background_btn" type="button" onclick="document.getElementById('youtube_demo_background').style.display = 'none'"></button>
+    <div class='video-container'> 
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/s80a45d8Ids" frameborder="0" allowfullscreen></iframe> 
+    </div>  
+    <button type="button" class="done_btn" onclick="document.getElementById('youtube_demo_background').style.display = 'none'">Done</button>
+</div>
+
+<div id="contribute_iframe_background">
+  <button id="contribute_iframe_background_btn" type="button" onclick="ConfirmContributionFunction()"></button>
+  <div>
+    <iframe id="contribute_iframe" src="https://goo.gl/forms/ds2Hiqbr2O80l2p72"></iframe>
+    <button type="button" class="done_btn" onclick="ConfirmContributionFunction()">Contribution is done</button>
   </div>
 </div>
 
