@@ -19,22 +19,28 @@ map.on('click', function (e) {
     if (!features.length) {return;}
     var feature = features[0];
     
-
+// If the newly clicked item has defined information, eg is a map element manualy added, display new info elso do nothing
     if (feature.properties.type == undefined) {
-
-    } else if (feature.properties.type == "Foto") {
-      document.getElementById('infobox_img').setAttribute('src', feature.properties.img);
-      document.getElementById('infobox_name').innerHTML = (feature.properties.name);
-      document.getElementById('infobox_info').innerHTML = (feature.properties.info);
-    } else if (feature.properties.type == "POI") {
-      document.getElementById('infobox_img').setAttribute('src', feature.properties.img);
-      document.getElementById('infobox_name').innerHTML = (feature.properties.name);
-      document.getElementById('infobox_info').innerHTML = (feature.properties.info);
     }
 
+    // if foto is clicked
+    else if (feature.properties.type == "Foto") {
+        document.getElementById('infobox_name').innerHTML = (feature.properties.name);
+        if (feature.properties.img != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.img); };
+        if (feature.properties.info != undefined) {document.getElementById('infobox_info').innerHTML = (feature.properties.info);
+        } else {
+          document.getElementById('infobox_info').innerHTML = ""; 
+        }
+
+    // if POI is clicked
+    } else if (feature.properties.type == "POI") {
+        document.getElementById('infobox_name').innerHTML = (feature.properties.name);
+        if (feature.properties.img != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.img); };
+        if (feature.properties.info != undefined) {document.getElementById('infobox_info').innerHTML = (feature.properties.info); };
+    }
 });
 
-//pointer changes
+//pointer changes (not working)
 map.addControl(new mapboxgl.NavigationControl());
 // map.on('load', function () {
 //     // Change the cursor to a pointer when the mouse is over the places layer.
@@ -100,8 +106,6 @@ $(document).ready(function() {
 //     //initiates map. select the first year and starts animation to zome to the starting position.
     map.on('load', function test() {
 //         //Set filter to first year of the year
-//         //filterBy("" + 2002 + "");
-//         //This has nowbeen doen earlyer in the code
 //         filterBy("" + 2002 + "");
 //         document.getElementById('slider').addEventListener('input', function(e) {
 //             var year = "" + parseInt(e.target.value, 10) + "";
