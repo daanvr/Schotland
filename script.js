@@ -21,13 +21,15 @@ map.on('click', function (e) {
     
 // If the newly clicked item has defined information, eg is a map element manualy added, display new info elso do nothing
     if (feature.properties.type == undefined) {
+        document.getElementById('infobox_name').innerHTML = ("Tonny's reis door Schotland");
+        document.getElementById('infobox_info').innerHTML = ("Dit is een interactive kaart van Tonny's reis door Schotland, in April van 2018, ten eren van haar 60ste verjaardag. Deze reis is gefinancierd door familie &amp vrienden als een cadeau voor deze heugelijke mijlpaal.")
     }
 
     // if foto is clicked
     else if (feature.properties.type == "Foto") {
-        document.getElementById('infobox_name').innerHTML = (feature.properties.name);
-        if (feature.properties.img != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.img); };
-        if (feature.properties.info != undefined) {document.getElementById('infobox_info').innerHTML = (feature.properties.info);
+        document.getElementById('infobox_name').innerHTML = (feature.properties.FileName);
+        if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
+        if (feature.properties.CreateTime != undefined) {document.getElementById('infobox_info').innerHTML = ("Time: " + feature.properties.CreateTime + "<br>" + "Date: " + feature.properties.CreateDate);
         } else {
           document.getElementById('infobox_info').innerHTML = ""; 
         }
@@ -35,7 +37,7 @@ map.on('click', function (e) {
     // if POI is clicked
     } else if (feature.properties.type == "POI") {
         document.getElementById('infobox_name').innerHTML = (feature.properties.name);
-        if (feature.properties.img != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.img); };
+        if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
         if (feature.properties.info != undefined) {document.getElementById('infobox_info').innerHTML = (feature.properties.info); };
     }
 });
