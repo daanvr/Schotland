@@ -29,6 +29,7 @@ map.on('click', function (e) {
     else if (feature.properties.type == "Foto") {
         document.getElementById('infobox_name').innerHTML = (feature.properties.FileName);
         if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
+        document.getElementById('Photo-Big').setAttribute('src', feature.properties.URL);
         if (feature.properties.CreateTime != undefined) {document.getElementById('infobox_info').innerHTML = ("Time: " + feature.properties.CreateTime + "<br>" + "Date: " + feature.properties.CreateDate);
         } else {
           document.getElementById('infobox_info').innerHTML = ""; 
