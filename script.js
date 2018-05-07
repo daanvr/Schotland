@@ -13,6 +13,12 @@ var map = new mapboxgl.Map({
     //minZoom: 14
 });
 
+// An atempt at making mousepointer change apearance on clickle map item.
+// map.on('mouseenter', 'Scotrip-FotoDataFile-LongLatOnly', function(e) {map.getCanvas().style.cursor = 'pointer';});
+// map.on('mouseleave', 'Scotrip-FotoDataFile-LongLatOnly', function() {map.getCanvas().style.cursor = '';});
+
+
+
 //this makes map features clickable and puts the data in theinfo box
 map.on('click', function (e) {
     var features = map.queryRenderedFeatures(e.point, {});
@@ -23,6 +29,8 @@ map.on('click', function (e) {
     if (feature.properties.type == undefined) {
         document.getElementById('infobox_name').innerHTML = ("Tonny's reis door Schotland");
         document.getElementById('infobox_info').innerHTML = ("Dit is een interactive kaart van Tonny's reis door Schotland, in April van 2018, ten eren van haar 60ste verjaardag. Deze reis is gefinancierd door familie &amp vrienden als een cadeau voor deze heugelijke mijlpaal.")
+        document.getElementById('infobox_img').setAttribute('src', "https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=400w");
+        document.getElementById('Photo-Big').setAttribute('src', "https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=600w");
     }
 
     // if foto is clicked
@@ -43,6 +51,34 @@ map.on('click', function (e) {
     }
 });
 
+
+
+
+
+
+// Add an event listener for the links in the sidebar listing
+document.getElementById("btn-next").addEventListener('click', function(e) {
+  // map.flyTo({
+  //       center: [-4.337799, 57.157900],
+  //       zoom: 7,
+  //       pitch: 0,
+  //       bearing: 0,
+  //       speed: 0.8, // make the flying slow
+  //       curve: 1.5, // change the speed at which it zooms out
+  //   });
+console.log("Voila!")
+});
+
+// Attempt at loading all map photo features. Unsuccesfull.
+// var feature;
+// var i;
+// for (i = 0; i < 10000; i++) { 
+//     console.log(feature);
+// }
+// map.on('mousemove', 'scotrip-fotodatafile-longlatonly', function(e) {
+//     var feature = e.features[0];
+// });
+
 //pointer changes (not working)
 map.addControl(new mapboxgl.NavigationControl());
 // map.on('load', function () {
@@ -58,7 +94,7 @@ map.addControl(new mapboxgl.NavigationControl());
 
 //creates Filters used by time selection to only keep data from the relevant year
 $(document).ready(function() {
-//     console.log("ready!");
+//    console.log("ready!");
 //     function filterBy(year) {
 //         var yearvar = document.getElementById("slider").value;
 //         var yearplus1N = Number(yearvar) + 1;
@@ -108,7 +144,12 @@ $(document).ready(function() {
     
 //     //initiates map. select the first year and starts animation to zome to the starting position.
     map.on('load', function test() {
-//         //Set filter to first year of the year
+// Createing var that holds all photos and their info. potentially usfull to show next and previous
+
+
+
+
+//Set filter to first year of the year
 //         filterBy("" + 2002 + "");
 //         document.getElementById('slider').addEventListener('input', function(e) {
 //             var year = "" + parseInt(e.target.value, 10) + "";

@@ -12,8 +12,8 @@ body {
 /*    margin-bottom: 45px;
 */}
 #map canvas {
-    cursor: crosshair;
-}
+/*    cursor: crosshair;
+*/}
 .map-overlay-yearsliderbox {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     position: fixed;
