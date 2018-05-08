@@ -14,11 +14,48 @@ var map = new mapboxgl.Map({
 });
 
 // An atempt at making mousepointer change apearance on clickle map item.
-// map.on('mouseenter', 'Scotrip-FotoDataFile-LongLatOnly', function(e) {map.getCanvas().style.cursor = 'pointer';});
-// map.on('mouseleave', 'Scotrip-FotoDataFile-LongLatOnly', function() {map.getCanvas().style.cursor = '';});
+map.on('mouseenter', 'photos', function(e) {map.getCanvas().style.cursor = 'pointer';});
+map.on('mouseleave', 'photos', function() {map.getCanvas().style.cursor = '';});
 
 
+map.on('load', function() {
 
+    map.addSource('Scotland-Data', {
+        "type": "geojson",
+        "data": "https://daanvr.github.io/Schotland/Scotrip-FotoDataFile-RichOnly-Live.geojson"
+    });
+
+
+//     map.addLayer({
+//         "id": "photos",
+//         "type": "line",
+//         "source": "Scotland-Data",
+//         "source-layer": "movesactivity",
+//         "layout": {
+//             "icon-image": "attraction-15",
+//             "icon-padding": 2,
+//             "icon-size": 10,
+//             "icon-allow-overlap":true
+//         }
+//     }, 'country-label-lg'); // Place polygon under these labels.
+
+// movesactivity
+
+    map.addLayer({
+        "id": "photos",
+        "type": "symbol",
+        "source": "Scotland-Data",
+        "layout": {
+            "icon-image": "attraction-15",
+            "icon-padding": 2,
+            "icon-size": 1,
+            "icon-allow-overlap":true
+        }
+    }, 'country-label-lg'); // Place polygon under these labels.
+
+console.log("werkt");
+
+});
 //this makes map features clickable and puts the data in theinfo box
 map.on('click', function (e) {
     var features = map.queryRenderedFeatures(e.point, {});
