@@ -14,32 +14,16 @@ var map = new mapboxgl.Map({
 });
 
 // An atempt at making mousepointer change apearance on clickle map item.
-map.on('mouseenter', 'photos', function(e) {map.getCanvas().style.cursor = 'pointer';});
-map.on('mouseleave', 'photos', function() {map.getCanvas().style.cursor = '';});
 
 
-map.on('load', function() {
+
+
+map.on('load', function(e) {
 
     map.addSource('Scotland-Data', {
         "type": "geojson",
         "data": "https://daanvr.github.io/Schotland/Scotrip-FotoDataFile-RichOnly-Live.geojson"
     });
-
-
-//     map.addLayer({
-//         "id": "photos",
-//         "type": "line",
-//         "source": "Scotland-Data",
-//         "source-layer": "movesactivity",
-//         "layout": {
-//             "icon-image": "attraction-15",
-//             "icon-padding": 2,
-//             "icon-size": 10,
-//             "icon-allow-overlap":true
-//         }
-//     }, 'country-label-lg'); // Place polygon under these labels.
-
-// movesactivity
 
     map.addLayer({
         "id": "photos",
@@ -47,15 +31,40 @@ map.on('load', function() {
         "source": "Scotland-Data",
         "layout": {
             "icon-image": "attraction-15",
-            "icon-padding": 2,
-            "icon-size": 1,
+            "icon-size": 1.25,
+            "icon-padding": 0,
             "icon-allow-overlap":true
         }
     }, 'country-label-lg'); // Place polygon under these labels.
 
-console.log("werkt");
+    map.addLayer({
+        "id": "photos-sameday",
+        "type": "symbol",
+        "source": "Scotland-Data",
+        "layout": {
+            "icon-image": "attraction-15",
+            "icon-size": 1.5,
+            "icon-allow-overlap":true
+        },
+        "filter": ["in", "CreateDate", ""]        
+    }, 'country-label-lg'); // Place polygon under these labels.
+
+
+//changes cursor style when on clickable layer.
+    map.on("mousemove", "photos", function(e) {map.getCanvas().style.cursor = 'pointer';});
+    map.on('mouseleave', 'photos', function() {map.getCanvas().style.cursor = '';});
+console.log("Klaar met laden");
+
+    // map.on('mousemove', 'photos', function(e) {
+    //     // Single out the first found feature.
+    //     var feature = e.features[0];
+    // });
+    // console.log(feature);
 
 });
+
+
+
 //this makes map features clickable and puts the data in theinfo box
 map.on('click', function (e) {
     var features = map.queryRenderedFeatures(e.point, {});
