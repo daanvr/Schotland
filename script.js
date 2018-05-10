@@ -33,22 +33,6 @@ map.on('load', function(e) {
         }
     }, 'country-label-lg'); // Place polygon under this labels.
 
-//Display not selected layer: 0.5 opacity
-    map.addLayer({
-        "id": "photos-not-selected",
-        "type": "symbol",
-        "source": "Scotland-Data",
-        "layout": {
-            "icon-image": "attraction-15",
-            "icon-size": 1.25,
-            "icon-padding": 0,
-            "icon-allow-overlap":true
-        },
-        "paint": {
-            "icon-opacity": 0.5
-        }
-    }, 'country-label-lg'); // Place polygon under this labels.
-
 //changes cursor style when on clickable layer.
     map.on("mousemove", "photos-selected" && "photos-not-selected", function(e) {map.getCanvas().style.cursor = 'pointer';});
     map.on('mouseleave', "photos-selected" && "photos-not-selected", function() {map.getCanvas().style.cursor = '';});
@@ -88,99 +72,55 @@ document.getElementById("btn-next").addEventListener('click', function(e) {
 //adds map controls to the map
 map.addControl(new mapboxgl.NavigationControl());
 
-//creates Filters used by time selection to only keep data from the relevant year
-$(document).ready(function() {
-    console.log("ready!");
-//     function filterBy(year) {
-//         var yearvar = document.getElementById("slider").value;
-//         var yearplus1N = Number(yearvar) + 1;
-//         var yearminus1N = Number(yearvar) - 1;
-//         var yearplus2N = Number(yearvar) + 2;
-//         var yearminus2N = Number(yearvar) - 2;
-//         var yearplus1 = yearplus1N.toString();
-//         var yearminus1 = yearminus1N.toString();
-//         var yearplus2 = yearplus2N.toString();
-//         var yearminus2 = yearminus2N.toString();
-// //Buidings
-//         map.setFilter('buildingslayer', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Building names
-//         map.setFilter('buildingslayer_name', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Building shadows
-//         map.setFilter('buildingslayer_shadow', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Water
-//         map.setFilter('waterlayer', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Roads
-//         map.setFilter('waysdataset', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Roads shadows
-//         map.setFilter('waysdataset_shadow', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //POIs
-//         map.setFilter('pois', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Sport
-//         map.setFilter('sports', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Sport names
-//         map.setFilter('sports_name', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Forest
-//         map.setFilter('forestcampus', [ "all", ['<=', 'start_date', year], ['>=', 'end_date', year]]);
-// //Photos (using + and - 2 years)
-//         map.setFilter('photos', [ "any", ['==', 'date', year], ['==', 'date', yearplus1], ['==', 'date', yearminus1], ['==', 'date', yearplus2], ['==', 'date', yearminus2]]);
+//Filter function
+function filterBy(SliderValue){
+    //get range slider valure from HTML
+    var slider = document.getElementById("slider-start").value;
+    var date  //Initalise date var
 
-// //make var based on value of the HTML slider
-//     document.getElementById('yearlable').textContent = year;
-
-// //hides the event box by default
-//     $('#map-overlay-eventbox').hide();    
-
-// //if "specific year" then write "specific text" in the top middle event box
-//     if (year == 1960) {
-//       document.getElementById('eventlable').textContent = "1960: The Drienerlo estate";
-//       $('#map-overlay-eventbox').show(); };
-
-//     if (year == 1961) {
-//       document.getElementById('eventlable').textContent = "1961: Official announcement of the THT";
-//       $('#map-overlay-eventbox').show(); };
-
-//     if (year == 1962) {
-//       document.getElementById('eventlable').textContent = "1962: Start of the construction works";
-//       $('#map-overlay-eventbox').show(); };
-
-//     if (year == 1964) {
-//       document.getElementById('eventlable').textContent = "1964: The first students arrive!";
-//       $('#map-overlay-eventbox').show(); };
-
-//     if (year == 1986) {
-//       document.getElementById('eventlable').textContent = "1986: The THT becomes the University of Twente";
-//       $('#map-overlay-eventbox').show(); };
-
-//     if (year == 2002) {
-//       document.getElementById('eventlable').textContent = "2002: Fire in the Cubicus destroying the east wing";
-//       $('#map-overlay-eventbox').show(); };
-
-// //If non of the abofe if statments is actuated, then hide the event box
-//     if (year != 1986 && year != 1961 && year != 1962 && year != 1964 && year != 2002)  {
-//       document.getElementById('eventlable').textContent = "";
-//       $('#map-overlay-eventbox').hide(); };
-//     }  //end of FilterBy(year) 
+    //translates the range slider steps to dates 
+    if (slider == 1) {date = "2018-04-06"}
+    else if (slider == 2) {date = "2018-04-07"}
+    else if (slider == 3) {date = "2018-04-08"}
+    else if (slider == 4) {date = "2018-04-09"}
+    else if (slider == 5) {date = "2018-04-10"}
+    else if (slider == 6) {date = "2018-04-11"}
+    else if (slider == 7) {date = "2018-04-12"}
+    else if (slider == 8) {date = "2018-04-13"}
+    else if (slider == 9) {date = "2018-04-14"}
+    else if (slider == 10) {date = "2018-04-15"}
     
-//when the map is loaded, do the things in this function
-    map.on('load', function test() {
+    //Actual Filtering by date
+    if (slider > 0) {map.setFilter('photos-selected', ["==", "CreateDate", date]);}
+    else {map.setFilter('photos-selected', null);}
+    
+    //Filtering confimration in console
+    console.log("Filtering:" + " " + date)
+};
 
-//Set filter to first year on map loaded
-    // filterBy("" + 2002 + "");
-    // document.getElementById('slider').addEventListener('input', function(e) {
-    //     var year = "" + parseInt(e.target.value, 10) + "";
-    //     filterBy(year);
-    // });
 
-//animate map at load finished
-    // map.flyTo({
-    //     center: [-4.337799, 57.157900],
-    //     zoom: 7,
-    //     pitch: 0,
-    //     bearing: 0,
-    //     speed: 0.8, // make the flying slow
-    //     curve: 1.5, // change the speed at which it zooms out
-    // });
+
+//when js is finished running
+$(document).ready(function() {
+    //confirm documetn is ready
+    console.log("ready!");
+
+
+    //make sure map is done loading, eg all the layers exist
+    map.on("load", function initiatefilter() {
+        //add event listener to HTML range slider
+        document.getElementById('slider-start').addEventListener('input', function(e) {
+            //code to be executed when event listener is triggerd
+            var SliderValue = "" + parseInt(e.target.value, 10) + "" //create vare with range slider value
+            filterBy(SliderValue);  //trigger Fiter function adn send varibale with it.
+       });
     });
 });
+
+
+
+
+
+
 
 
