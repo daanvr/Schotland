@@ -120,7 +120,7 @@ function filterBy(SliderValue){
     }
     
     //Filtering confimration in console
-    console.log("Filtering:" + " " + date)
+    console.log("Filtering:" + " " + date) 
 };
 
 
