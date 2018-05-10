@@ -11,17 +11,20 @@ var map = new mapboxgl.Map({
 
 map.on('load', function(e) {
 
-//load geojson
-    map.addSource('Scotland-Data', {
+//load geojson files
+    map.addSource('Scotland-Foto', {
         "type": "geojson",
         "data": "https://daanvr.github.io/Schotland/Scotrip-FotoDataFile-RichOnly-Live.geojson"
     });
+    map.addSource('Scotland-Routes', {
+        "type": "geojson",
+        "data": "https://daanvr.github.io/Schotland/Routes.geojson"
+    });
 
-//Display selected layer
     map.addLayer({
-        "id": "photos-selected",
+        "id": "photos",
         "type": "symbol",
-        "source": "Scotland-Data",
+        "source": "Scotland-Foto",
         "layout": {
             "icon-image": "attraction-15",
             "icon-size": 1.25,
@@ -33,9 +36,24 @@ map.on('load', function(e) {
         }
     }, 'country-label-lg'); // Place polygon under this labels.
 
+    map.addLayer({
+        "id": "routes",
+        "type": "line",
+        "source": "Scotland-Routes",
+        "layout": {
+        
+        },
+        "paint": {
+            "line-color": "#ffffff",
+            "line-width": 2,
+            "line-gap-width": 1
+        }
+    }, 'photos'); // Place polygon under this labels.
+
+
 //changes cursor style when on clickable layer.
-    map.on("mousemove", "photos-selected" && "photos-not-selected", function(e) {map.getCanvas().style.cursor = 'pointer';});
-    map.on('mouseleave', "photos-selected" && "photos-not-selected", function() {map.getCanvas().style.cursor = '';});
+    map.on("mousemove", "photos", function(e) {map.getCanvas().style.cursor = 'pointer';});
+    map.on('mouseleave', "photos", function() {map.getCanvas().style.cursor = '';});
 });
 
 //this makes map features clickable and puts the data in theinfo box
@@ -77,22 +95,29 @@ function filterBy(SliderValue){
     //get range slider valure from HTML
     var slider = document.getElementById("slider-start").value;
     var date  //Initalise date var
+    var dateroutes  //Initalise dateroutes var
 
     //translates the range slider steps to dates 
-    if (slider == 1) {date = "2018-04-06"}
-    else if (slider == 2) {date = "2018-04-07"}
-    else if (slider == 3) {date = "2018-04-08"}
-    else if (slider == 4) {date = "2018-04-09"}
-    else if (slider == 5) {date = "2018-04-10"}
-    else if (slider == 6) {date = "2018-04-11"}
-    else if (slider == 7) {date = "2018-04-12"}
-    else if (slider == 8) {date = "2018-04-13"}
-    else if (slider == 9) {date = "2018-04-14"}
-    else if (slider == 10) {date = "2018-04-15"}
+         if (slider == 1) {date = "2018-04-06"; dateroutes = "20180407";}
+    else if (slider == 2) {date = "2018-04-07"; dateroutes = "20180408";}
+    else if (slider == 3) {date = "2018-04-08"; dateroutes = "20180409";}
+    else if (slider == 4) {date = "2018-04-09"; dateroutes = "20180410";}
+    else if (slider == 5) {date = "2018-04-10"; dateroutes = "20180411";}
+    else if (slider == 6) {date = "2018-04-11"; dateroutes = "20180412";}
+    else if (slider == 7) {date = "2018-04-12"; dateroutes = "20180413";}
+    else if (slider == 8) {date = "2018-04-13"; dateroutes = "20180414";}
+    else if (slider == 9) {date = "2018-04-14"; dateroutes = "20180415";}
+    else if (slider == 10) {date = "2018-04-15"; dateroutes = "20180416";}
     
     //Actual Filtering by date
-    if (slider > 0) {map.setFilter('photos-selected', ["==", "CreateDate", date]);}
-    else {map.setFilter('photos-selected', null);}
+    if (slider > 0 && slider < 11) {
+        map.setFilter('photos', ["==", "CreateDate", date]);
+        map.setFilter('routes', ["<=", "startTime", dateroutes]);
+    }
+    else {
+        map.setFilter('photos', null);
+        map.setFilter('routes', null);
+    }
     
     //Filtering confimration in console
     console.log("Filtering:" + " " + date)
