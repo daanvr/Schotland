@@ -3,6 +3,33 @@ body {
     margin: 0px;
 }
 
+.Photo-Small {
+  /*vertical-align: middle;*/
+  vertical-align:text-bottom;
+  font-size: 0px;
+  height: 0px;
+  width: 0px;
+  top: -20px;
+  border-radius: 5px;
+    background-color: transparent;
+
+}
+
+img {
+    border-radius: 5px;
+}
+
+.infobox_img_div {
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+.map-overlay-infobox{
+  border-radius: 10px;
+  background-color: transparent;
+
+}
+
 #map {
     position: absolute; !important;
     top: 0px !important;
