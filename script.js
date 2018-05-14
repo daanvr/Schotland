@@ -65,7 +65,13 @@ map.on('load', function(e) {
         }
     }, 'routes-today'); // Place polygon under this labels.
 
+    map.on("load", 'photos', function nextfoto() {
+        var testing = feature.properties.FileName;
+        console.log("nextfoto var: "testing);
 
+    });
+
+    nextfoto(1);
 
 //changes cursor style when on clickable layer.
     map.on("mousemove", "photos", function(e) {map.getCanvas().style.cursor = 'pointer';});
@@ -164,6 +170,8 @@ $(document).ready(function() {
        });
     });
 });
+
+
 
 
 
