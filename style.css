@@ -3,6 +3,15 @@ body {
     margin: 0px;
 }
 
+.hovering-carousel {
+  position: fixed;
+  width: 100vw;
+  height: 100px;
+  bottom: 50px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+
 .Photo-Small {
   /*vertical-align: middle;*/
   vertical-align:text-bottom;
