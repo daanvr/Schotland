@@ -111,62 +111,53 @@ function filterBy(SliderValue){
     //get range slider valure from HTML
     var slider = document.getElementById("slider-start").value;
     var datephotos  //Initalise date var
-    var dateroutes  //Initalise dateroutes var
+    var dateroutesto  //Initalise dateroutes var
     var dateroutesfrom  //Initalise dateroutes var
+    var currentday
 
     //translates the range slider steps to dates for photos routes and routesday before
-         if (slider == 1) {datephotos = "2018-04-06"; dateroutes = "20180407"; dateroutesfrom = "20180406";}
-    else if (slider == 2) {datephotos = "2018-04-07"; dateroutes = "20180408"; dateroutesfrom = "20180407";}
-    else if (slider == 3) {datephotos = "2018-04-08"; dateroutes = "20180409"; dateroutesfrom = "20180408";}
-    else if (slider == 4) {datephotos = "2018-04-09"; dateroutes = "20180410"; dateroutesfrom = "20180409";}
-    else if (slider == 5) {datephotos = "2018-04-10"; dateroutes = "20180411"; dateroutesfrom = "20180410";}
-    else if (slider == 6) {datephotos = "2018-04-11"; dateroutes = "20180412"; dateroutesfrom = "20180411";}
-    else if (slider == 7) {datephotos = "2018-04-12"; dateroutes = "20180413"; dateroutesfrom = "20180412";}
-    else if (slider == 8) {datephotos = "2018-04-13"; dateroutes = "20180414"; dateroutesfrom = "20180413";}
-    else if (slider == 9) {datephotos = "2018-04-14"; dateroutes = "20180415"; dateroutesfrom = "20180414";}
-    else if (slider == 10) {datephotos = "2018-04-15"; dateroutes = "20180416"; dateroutesfrom = "20180415";}
+         if (slider == 1) {datephotos = "2018-04-06"; dateroutesto = "20180407"; dateroutesfrom = "20180406"; currentday = "Aankomst Dag"}
+    else if (slider == 2) {datephotos = "2018-04-07"; dateroutesto = "20180408"; dateroutesfrom = "20180407"; currentday = "Zaterdag"}
+    else if (slider == 3) {datephotos = "2018-04-08"; dateroutesto = "20180409"; dateroutesfrom = "20180408"; currentday = "Zondag"}
+    else if (slider == 4) {datephotos = "2018-04-09"; dateroutesto = "20180410"; dateroutesfrom = "20180409"; currentday = "Maandag "}
+    else if (slider == 5) {datephotos = "2018-04-10"; dateroutesto = "20180411"; dateroutesfrom = "20180410"; currentday = "Dinsdag"}
+    else if (slider == 6) {datephotos = "2018-04-11"; dateroutesto = "20180412"; dateroutesfrom = "20180411"; currentday = "Woensdag"}
+    else if (slider == 7) {datephotos = "2018-04-12"; dateroutesto = "20180413"; dateroutesfrom = "20180412"; currentday = "Donderdag"}
+    else if (slider == 8) {datephotos = "2018-04-13"; dateroutesto = "20180414"; dateroutesfrom = "20180413"; currentday = "Vrijdag"}
+    else if (slider == 9) {datephotos = "2018-04-14"; dateroutesto = "20180415"; dateroutesfrom = "20180414"; currentday = "Zaterdag"}
+    else if (slider == 10) {datephotos = "2018-04-15"; dateroutesto = "20180416"; dateroutesfrom = "20180415"; currentday = "Laaste dag"}
+    else (currentday = "No date selected")
     
-    //Actual Filtering by date
+    //exectution of filter by date
     if (slider > 0 && slider < 11) {
         map.setFilter('photos', ["==", "CreateDate", datephotos]);
-        map.setFilter('routes', ["<=", "startTime", dateroutes]);
-        map.setFilter('routes-today', ["all", ["<=", "startTime", dateroutes], [">=", "startTime", dateroutesfrom]]);
+        map.setFilter('routes', ["<=", "startTime", dateroutesto]);
+        map.setFilter('routes-today', ["all", ["<=", "startTime", dateroutesto], [">=", "startTime", dateroutesfrom]]);
+        // document.getElementById("daylable").textContent = currentday;
     }
     else {
         map.setFilter('photos', null);
         map.setFilter('routes', null);
         map.setFilter('routes-today', ["<=", "startTime", 1]);
+        currentday = "Alle dagen"
     }
-    
+    //set Day Lable to correct day 
+    document.getElementById("daylable").textContent = currentday;
     //Filtering confimration in console
-    console.log("Filtering:" + " " + datephotos) 
+    console.log("Filtering:" + " " + currentday) 
 };
 
-
-
-//when js is finished running
-$(document).ready(function() {
-    //confirm documetn is ready
-    console.log("ready!");
-
-
-
-    //make sure map is done loading, eg all the layers exist
-    map.on("load", function initiatefilter() {
-        //Initiate Filter
-        filterBy("" + 0 + "");
-        //add event listener to HTML range slider
-        document.getElementById('slider-start').addEventListener('input', function(e) {
-            //code to be executed when event listener is triggerd
-            var SliderValue = "" + parseInt(e.target.value, 10) + "" //create vare with range slider value
-            filterBy(SliderValue);  //trigger Fiter function adn send varibale with it.
-       });
-    });
+//make sure map is done loading, eg all the layers exist
+map.on("load", function initiatefilter() {
+    //Initiate Filter
+    filterBy("" + 0 + "");
+    //add event listener to HTML range slider
+    document.getElementById('slider-start').addEventListener('input', function(e) {
+        //code to be executed when event listener is triggerd
+        var SliderValue = "" + parseInt(e.target.value, 10) + "" //create vare with range slider value
+        filterBy(SliderValue);  //trigger Fiter function adn send varibale with it.
+   });
 });
-
-
-
-
 
 //load json file as static databse
 //coppy json data to the "photoDB" var
@@ -180,5 +171,17 @@ xmlhttp.onreadystatechange = function() {
     //document.getElementById("infobox_name").textContent = photoDB[1].FileName;
 };
 
+
+
+
+
+
+//Legacie?
+        // //when js is finished running
+        // $(document).ready(function() {
+        //     //confirm documetn is ready
+        //     console.log("ready!");
+
+        // });
 
 
