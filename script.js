@@ -83,12 +83,8 @@ map.on('click', function (e) {
         // document.getElementById('infobox_name').innerHTML = (feature.properties.FileName);
         if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
         document.getElementById('Photo-Big').setAttribute('src', feature.properties.URL);
-        selectedphoto.nbr = feature.properties.nbr;
-        // if (feature.properties.CreateTime != undefined) {document.getElementById('infobox_info').innerHTML = ("Time: " + feature.properties.CreateTime + "<br>" + "Date: " + feature.properties.CreateDate);
-        // } else {
-        //   document.getElementById('infobox_info').innerHTML = ""; 
-        // }
-        console.log(feature.properties.nbr);
+        //set selected foto nbr to clicked photo nbr. for this to work the geojson data needst to be updated
+        //selectedphoto.nbr = feature.properties.nbr;
     }
 
 //If clicked on a random place on the map, display default info    
@@ -106,6 +102,13 @@ document.getElementById("nextph").addEventListener('click', function(e) {
         NewPhotos(selectedphoto.nbr);
 //     //put js consequenses here:
 });
+
+document.getElementById("prevph").addEventListener('click', function(e) {
+        selectedphoto.nbr = selectedphoto.nbr - 1;
+        NewPhotos(selectedphoto.nbr);
+//     //put js consequenses here:
+});
+
 
 //adds map controls to the map
 map.addControl(new mapboxgl.NavigationControl());
@@ -171,32 +174,38 @@ var prevphoto = {};
 var selectedphoto = {};
 var nextphoto = {};
 function NewPhotos(newmainphotonbr){
-    prevphoto = {nbr:newmainphotonbr - 1, URLsmall:"", URL:""};
-    prevphoto.URLsmall = photoDB[prevphoto.nbr].URLsmall;
-    prevphoto.URL = photoDB[prevphoto.nbr].URL;
+    // prevphoto = {nbr:newmainphotonbr - 1, URLsmall:"", URL:""};
+    // prevphoto.URLsmall = photoDB[prevphoto.nbr].URLsmall;
+    // prevphoto.URL = photoDB[prevphoto.nbr].URL;
     
     selectedphoto = {nbr:newmainphotonbr, URLsmall:"", URL:""};
     selectedphoto.URLsmall = photoDB[selectedphoto.nbr].URLsmall;
     selectedphoto.URL = photoDB[selectedphoto.nbr].URL;
+    selectedphoto.latitude = photoDB[selectedphoto.nbr].Latitude;
+    selectedphoto.longitude = photoDB[selectedphoto.nbr].Longitude;
 
-    nextphoto     = {nbr:newmainphotonbr + 1, URLsmall:"", URL:""};
-    nextphoto.URLsmall = photoDB[nextphoto.nbr].URLsmall;
-    nextphoto.URL = photoDB[nextphoto.nbr].URL;
+    // nextphoto     = {nbr:newmainphotonbr + 1, URLsmall:"", URL:""};
+    // nextphoto.URLsmall = photoDB[nextphoto.nbr].URLsmall;
+    // nextphoto.URL = photoDB[nextphoto.nbr].URL;
 
     writephotovars();
 
     //document.getElementById('ph1').setAttribute('src', prevphoto.URL);
     document.getElementById('infobox_img').setAttribute('src', selectedphoto.URL);
     //document.getElementById('ph3').setAttribute('src', nextphoto.URL);
+    map.flyTo({
+        center: [selectedphoto.longitude, selectedphoto.latitude],
+        zoom: (10)
+    });
 
 };
 
 function writephotovars(){
-    console.log("new photos info:");
-    console.log(prevphoto);
+    console.log("selected photo info:");
+    // console.log(prevphoto);
     console.log(selectedphoto);
-    console.log(nextphoto);
-    console.log(photoDB);
+    // console.log(nextphoto);
+    // console.log(photoDB);
 };
 
 
