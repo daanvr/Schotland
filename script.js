@@ -1,4 +1,6 @@
 //Mapbox initalisation
+var photoDB;
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGFhbnZyIiwiYSI6ImNpdTJmczN3djAwMHEyeXBpNGVndWtuYXEifQ.GYZf7r9gTfQL3W-GpmmJ3A';
 var map = new mapboxgl.Map({
     container: 'map',
@@ -64,14 +66,6 @@ map.on('load', function(e) {
             "line-gap-width": 1
         }
     }, 'routes-today'); // Place polygon under this labels.
-
-    map.on("load", 'photos', function nextfoto() {
-        var testing = feature.properties.FileName;
-        console.log("nextfoto var: "testing);
-
-    });
-
-    nextfoto(1);
 
 //changes cursor style when on clickable layer.
     map.on("mousemove", "photos", function(e) {map.getCanvas().style.cursor = 'pointer';});
@@ -161,7 +155,6 @@ $(document).ready(function() {
     map.on("load", function initiatefilter() {
         //Initiate Filter
         filterBy("" + 0 + "");
-
         //add event listener to HTML range slider
         document.getElementById('slider-start').addEventListener('input', function(e) {
             //code to be executed when event listener is triggerd
@@ -175,8 +168,17 @@ $(document).ready(function() {
 
 
 
-
-
+//load json file as static databse
+//coppy json data to the "photoDB" var
+var photoDB;
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET", "https://daanvr.github.io/Schotland/photoDB.json", true);
+xmlhttp.send();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) { photoDB = JSON.parse(this.responseText);}
+    //console.log(photoDB);
+    //document.getElementById("infobox_name").textContent = photoDB[1].FileName;
+};
 
 
 
