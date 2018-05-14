@@ -83,10 +83,12 @@ map.on('click', function (e) {
         // document.getElementById('infobox_name').innerHTML = (feature.properties.FileName);
         if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
         document.getElementById('Photo-Big').setAttribute('src', feature.properties.URL);
+        selectedphoto.nbr = feature.properties.nbr;
         // if (feature.properties.CreateTime != undefined) {document.getElementById('infobox_info').innerHTML = ("Time: " + feature.properties.CreateTime + "<br>" + "Date: " + feature.properties.CreateDate);
         // } else {
         //   document.getElementById('infobox_info').innerHTML = ""; 
         // }
+        console.log(feature.properties.nbr);
     }
 
 //If clicked on a random place on the map, display default info    
@@ -99,9 +101,11 @@ map.on('click', function (e) {
 });
 
 // makes HTML button clickable, with js consequenses
-// document.getElementById("btn-next").addEventListener('click', function(e) {
+document.getElementById("nextph").addEventListener('click', function(e) {
+        selectedphoto.nbr = selectedphoto.nbr + 1;
+        NewPhotos(selectedphoto.nbr);
 //     //put js consequenses here:
-// });
+});
 
 //adds map controls to the map
 map.addControl(new mapboxgl.NavigationControl());
@@ -115,42 +119,34 @@ function filterBy(SliderValue){
     var dateroutesfrom  //Initalise dateroutes var
     var currentday
 
-    //translates the range slider steps to dates for photos routes and routesday before
-         if (slider == 1) {datephotos = "2018-04-06"; dateroutesto = "20180407"; dateroutesfrom = "20180406"; currentday = "Aankomst Dag"}
-    else if (slider == 2) {datephotos = "2018-04-07"; dateroutesto = "20180408"; dateroutesfrom = "20180407"; currentday = "Zaterdag"}
-    else if (slider == 3) {datephotos = "2018-04-08"; dateroutesto = "20180409"; dateroutesfrom = "20180408"; currentday = "Zondag"}
-    else if (slider == 4) {datephotos = "2018-04-09"; dateroutesto = "20180410"; dateroutesfrom = "20180409"; currentday = "Maandag "}
-    else if (slider == 5) {datephotos = "2018-04-10"; dateroutesto = "20180411"; dateroutesfrom = "20180410"; currentday = "Dinsdag"}
-    else if (slider == 6) {datephotos = "2018-04-11"; dateroutesto = "20180412"; dateroutesfrom = "20180411"; currentday = "Woensdag"}
-    else if (slider == 7) {datephotos = "2018-04-12"; dateroutesto = "20180413"; dateroutesfrom = "20180412"; currentday = "Donderdag"}
-    else if (slider == 8) {datephotos = "2018-04-13"; dateroutesto = "20180414"; dateroutesfrom = "20180413"; currentday = "Vrijdag"}
-    else if (slider == 9) {datephotos = "2018-04-14"; dateroutesto = "20180415"; dateroutesfrom = "20180414"; currentday = "Zaterdag"}
-    else if (slider == 10) {datephotos = "2018-04-15"; dateroutesto = "20180416"; dateroutesfrom = "20180415"; currentday = "Laaste dag"}
-    else (currentday = "No date selected")
-    
+    //arrays of relevant valies compared to slider value. eg slider position 4 of datephotos = 2018-04-09 and position 4 of currentday = Maandag 
+    datephotos =        ["",            "2018-04-06",   "2018-04-07",   "2018-04-08",   "2018-04-09",   "2018-04-10",   "2018-04-11",   "2018-04-12",   "2018-04-13",   "2018-04-14",   "2018-04-15", ""          ];
+    dateroutesfrom =    ["",            "20180406",     "20180407",     "20180408",     "20180409",     "20180410",     "20180411",     "20180412",     "20180413",     "20180414",     "20180415",   ""          ];
+    dateroutesto =      ["",            "20180407",     "20180408",     "20180409",     "20180410",     "20180411",     "20180412",     "20180413",     "20180414",     "20180415",     "20180416",   ""          ];
+    currentday =        ["Alle dagen",  "Aankomst Dag", "Zaterdag",     "Zondag",       "Maandag",      "Dinsdag",      "Woensdag",     "Donderdag",    "Vrijdag",      "Zaterdag",     "Laaste dag", "Alle dagen"];
+
     //exectution of filter by date
     if (slider > 0 && slider < 11) {
-        map.setFilter('photos', ["==", "CreateDate", datephotos]);
-        map.setFilter('routes', ["<=", "startTime", dateroutesto]);
-        map.setFilter('routes-today', ["all", ["<=", "startTime", dateroutesto], [">=", "startTime", dateroutesfrom]]);
-        // document.getElementById("daylable").textContent = currentday;
+        map.setFilter('photos', ["==", "CreateDate", datephotos[slider]]);
+        map.setFilter('routes', ["<=", "startTime", dateroutesto[slider]]);
+        map.setFilter('routes-today', ["all", ["<=", "startTime", dateroutesto[slider]], [">=", "startTime", dateroutesfrom[slider]]]);
     }
     else {
         map.setFilter('photos', null);
         map.setFilter('routes', null);
         map.setFilter('routes-today', ["<=", "startTime", 1]);
-        currentday = "Alle dagen"
     }
     //set Day Lable to correct day 
-    document.getElementById("daylable").textContent = currentday;
+    document.getElementById("daylable").textContent = currentday[slider];
     //Filtering confimration in console
-    console.log("Filtering:" + " " + currentday) 
+    console.log("Filtering: " + currentday[slider]) 
 };
 
 //make sure map is done loading, eg all the layers exist
 map.on("load", function initiatefilter() {
     //Initiate Filter
     filterBy("" + 0 + "");
+    NewPhotos(61);
     //add event listener to HTML range slider
     document.getElementById('slider-start').addEventListener('input', function(e) {
         //code to be executed when event listener is triggerd
@@ -171,17 +167,36 @@ xmlhttp.onreadystatechange = function() {
     //document.getElementById("infobox_name").textContent = photoDB[1].FileName;
 };
 
+var prevphoto = {};
+var selectedphoto = {};
+var nextphoto = {};
+function NewPhotos(newmainphotonbr){
+    prevphoto = {nbr:newmainphotonbr - 1, URLsmall:"", URL:""};
+    prevphoto.URLsmall = photoDB[prevphoto.nbr].URLsmall;
+    prevphoto.URL = photoDB[prevphoto.nbr].URL;
+    
+    selectedphoto = {nbr:newmainphotonbr, URLsmall:"", URL:""};
+    selectedphoto.URLsmall = photoDB[selectedphoto.nbr].URLsmall;
+    selectedphoto.URL = photoDB[selectedphoto.nbr].URL;
 
+    nextphoto     = {nbr:newmainphotonbr + 1, URLsmall:"", URL:""};
+    nextphoto.URLsmall = photoDB[nextphoto.nbr].URLsmall;
+    nextphoto.URL = photoDB[nextphoto.nbr].URL;
 
+    writephotovars();
 
+    //document.getElementById('ph1').setAttribute('src', prevphoto.URL);
+    document.getElementById('infobox_img').setAttribute('src', selectedphoto.URL);
+    //document.getElementById('ph3').setAttribute('src', nextphoto.URL);
 
+};
 
-//Legacie?
-        // //when js is finished running
-        // $(document).ready(function() {
-        //     //confirm documetn is ready
-        //     console.log("ready!");
-
-        // });
+function writephotovars(){
+    console.log("new photos info:");
+    console.log(prevphoto);
+    console.log(selectedphoto);
+    console.log(nextphoto);
+    console.log(photoDB);
+};
 
 
