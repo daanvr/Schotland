@@ -22,17 +22,23 @@
 <!-- html of the informaiton box on the left side  -->
   <div class='map-overlay-infobox'>
       <div class='map-overlay-infobox-content'>
-      <div class='infobox_name_div'><p id="infobox_name">Tonny's reis door Schotland</p></div>
+      <!-- <div class='infobox_name_div'><p id="infobox_name">Tonny's reis door Schotland</p></div> -->
       <!-- <button id="btn-next">Next</button> -->
-      <button id="prevph">Previous photo</button>
-      <button id="nextph">Next photo</button>
-      <div class='infobox_img_div'><a class="Photo-Small" onclick="document.getElementById('Photo-Big-Background').style.display = 'inline'"><img id="infobox_img" src="https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=400w" style="max-width: 100%; max-height: 100%;"></a>
-
+      
+      <div class='infobox_img_div'>
+        <button class="img-btn prevph" id="prevph">Previous photo</button>
+        <button class="img-btn bigph" id="bigph">Big</button>
+        <button class="img-btn locph" id="locph">location</button>
+        <button class="img-btn nextph" id="nextph">Next photo</button>
+        <a class="Photo-Small" onclick="document.getElementById('Photo-Big-Background').style.display = 'inline'">
+          <img id="infobox_img" src="https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=400w" style="max-width: 100%; max-height: 100%;">
+        </a>
+      </div>
 <!-- <img id="ph1" src="" style= "width: 250px;"><br>
 <img id="ph2" src="" style= "width: 250px;"><br>
 <img id="ph3" src="" style= "width: 250px;"><br> -->
 
-      </div>    
+          
     </div>
   </div>
 
@@ -59,6 +65,14 @@
 <!-- attempt at building a in map carousel -->
 <div class="hovering-carousel" id="main-carousel">
 
+  <div class="carousel-containter"><img class="carousel-img" src="https://farm1.staticflickr.com/829/26803902737_7e04388713_o.jpg"></div>
+  <div class="carousel-containter"><img class="carousel-img" src="https://farm1.staticflickr.com/969/27803063028_b308bf86e2.jpg"></div>
+  <div class="carousel-containter"><img class="carousel-img" src="https://farm1.staticflickr.com/829/26803902737_7e04388713_o.jpg"></div>
+  <div class="carousel-containter"><img class="carousel-img" src="https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=400w"></div>
+  <div class="carousel-containter"><img class="carousel-img" src="https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=400w"></div>
+  <div class="carousel-containter"><img class="carousel-img" src="https://farm1.staticflickr.com/829/26803902737_7e04388713_o.jpg"></div>
+  <div class="carousel-containter"><img class="carousel-img" src="https://farm1.staticflickr.com/969/27803063028_b308bf86e2.jpg"></div>
+  <div class="carousel-containter"><img class="carousel-img" src="https://farm1.staticflickr.com/829/26803902737_7e04388713_o.jpg"></div>
 </div>
 
 <!-- loading jave script that manages interaction with the map -->

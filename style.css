@@ -3,14 +3,64 @@ body {
     margin: 0px;
 }
 
+.img-btn {
+position: absolute;
+top: 5px;
+background-color: rgba(0, 0, 0, 0.2);
+border-radius: 5px;
+border: 0px;
+color: white;
+font-weight: bold;
+}
+
+.prevph {
+left: 5px;
+}
+
+.bigph {
+left: 35%;
+}
+
+.locph {
+right: 30%
+}
+
+.nextph {
+right: 5px;
+}
+
+div.img0 {
+  margin-left: 25px;
+  margin-right: 25px;   
+}
+
+.img0 {
+  border-color: red;
+}
+
 .hovering-carousel {
   position: fixed;
-  width: 100vw;
+  width: 1000vw;
   height: 100px;
   bottom: 50px;
   background-color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  padding: 5px;
 }
 
+.carousel-containter {
+  height: 100%;
+  width: 50px;
+  margin-left: 5px; 
+  overflow: hidden;
+  border-radius: 3px;
+  float: left;
+}
+
+.carousel-img {
+  height: 100%;
+  margin-left: -40%;
+}
 
 .Photo-Small {
   /*vertical-align: middle;*/

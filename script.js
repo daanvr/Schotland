@@ -78,19 +78,16 @@ map.on('click', function (e) {
     if (!features.length) {return;}
     var feature = features[0];
 
-//If clicked on a photo, display photo info 
+    //If clicked on a photo, display photo info 
     if (feature.properties.type == "Foto") {
-        // document.getElementById('infobox_name').innerHTML = (feature.properties.FileName);
         if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
         document.getElementById('Photo-Big').setAttribute('src', feature.properties.URL);
         //set selected foto nbr to clicked photo nbr. for this to work the geojson data needst to be updated
         //selectedphoto.nbr = feature.properties.nbr;
     }
 
-//If clicked on a random place on the map, display default info    
+    //If clicked on a random place on the map, display default info    
     else if (feature.properties.type == undefined) {
-        // document.getElementById('infobox_name').innerHTML = ("Tonny's reis door Schotland");
-        // document.getElementById('infobox_info').innerHTML = ("Dit is een interactive kaart van Tonny's reis door Schotland, in April van 2018, ten eren van haar 60ste verjaardag. Deze reis is gefinancierd door familie &amp vrienden als een cadeau voor deze heugelijke mijlpaal.")
         document.getElementById('infobox_img').setAttribute('src', "https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=400w");
         document.getElementById('Photo-Big').setAttribute('src', "https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=600w");
     }
@@ -98,17 +95,31 @@ map.on('click', function (e) {
 
 // makes HTML button clickable, with js consequenses
 document.getElementById("nextph").addEventListener('click', function(e) {
-        selectedphoto.nbr = selectedphoto.nbr + 1;
-        NewPhotos(selectedphoto.nbr);
-//     //put js consequenses here:
+    selectedphoto.nbr = selectedphoto.nbr + 1;
+    NewPhotos(selectedphoto.nbr);
 });
 
 document.getElementById("prevph").addEventListener('click', function(e) {
-        selectedphoto.nbr = selectedphoto.nbr - 1;
-        NewPhotos(selectedphoto.nbr);
-//     //put js consequenses here:
+    selectedphoto.nbr = selectedphoto.nbr - 1;
+    NewPhotos(selectedphoto.nbr);
 });
 
+document.getElementById("locph").addEventListener('click', function(e) {
+    Long = photoDB[selectedphoto.nbr].Longitude;
+    Lat = photoDB[selectedphoto.nbr].Latitude;
+    Fly(Long, Lat);
+});
+
+document.getElementById("bigph").addEventListener('click', function(e) {
+    document.getElementById('Photo-Big-Background').style.display = 'inline';
+});
+
+function Fly(Long, Lat){
+    map.flyTo({
+        center: [Long, Lat],
+        zoom: (10)
+    });
+};
 
 //adds map controls to the map
 map.addControl(new mapboxgl.NavigationControl());
@@ -149,7 +160,7 @@ function filterBy(SliderValue){
 map.on("load", function initiatefilter() {
     //Initiate Filter
     filterBy("" + 0 + "");
-    NewPhotos(61);
+    NewPhotos(64);
     //add event listener to HTML range slider
     document.getElementById('slider-start').addEventListener('input', function(e) {
         //code to be executed when event listener is triggerd
@@ -158,22 +169,42 @@ map.on("load", function initiatefilter() {
    });
 });
 
-//load json file as static databse
-//coppy json data to the "photoDB" var
+//load json file as static databse and store data in the photoDB var
 var photoDB;
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET", "https://daanvr.github.io/Schotland/photoDB.json", true);
 xmlhttp.send();
 xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) { photoDB = JSON.parse(this.responseText);}
-    //console.log(photoDB);
-    //document.getElementById("infobox_name").textContent = photoDB[1].FileName;
 };
 
 var prevphoto = {};
 var selectedphoto = {};
 var nextphoto = {};
+var carouselphotos = {};
 function NewPhotos(newmainphotonbr){
+    //delete existing imgs form carousel
+    var carousel = document.getElementById("main-carousel");
+    while (carousel.hasChildNodes()) {
+        carousel.removeChild(carousel.firstChild);
+    }
+
+    //makes a loop to ad all img to carousel    
+    var i;
+    for (i = newmainphotonbr - 5; i < newmainphotonbr+20; i++) { 
+        var newdiv = document.createElement('div');
+        var position = newmainphotonbr - i
+        newdiv.className = 'carousel-containter img' + position;
+        newdiv.Name = i;
+        newdiv.onclick = "NewPhotos(i)";
+        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewPhotos(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
+        
+        document.getElementById('main-carousel').appendChild(newdiv);
+        
+    };
+
+
+
     // prevphoto = {nbr:newmainphotonbr - 1, URLsmall:"", URL:""};
     // prevphoto.URLsmall = photoDB[prevphoto.nbr].URLsmall;
     // prevphoto.URL = photoDB[prevphoto.nbr].URL;
@@ -191,13 +222,9 @@ function NewPhotos(newmainphotonbr){
     writephotovars();
 
     //document.getElementById('ph1').setAttribute('src', prevphoto.URL);
-    document.getElementById('infobox_img').setAttribute('src', selectedphoto.URL);
+    document.getElementById('infobox_img').setAttribute('src', selectedphoto.URLsmall);
+    document.getElementById('Photo-Big').setAttribute('src', selectedphoto.URL);
     //document.getElementById('ph3').setAttribute('src', nextphoto.URL);
-    map.flyTo({
-        center: [selectedphoto.longitude, selectedphoto.latitude],
-        zoom: (10)
-    });
-
 };
 
 function writephotovars(){
