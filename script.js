@@ -83,25 +83,25 @@ map.on('click', function (e) {
         if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
         document.getElementById('Photo-Big').setAttribute('src', feature.properties.URL);
         //set selected foto nbr to clicked photo nbr. for this to work the geojson data needst to be updated
-        //selectedphoto.nbr = feature.properties.nbr;
+        //NewSelection(feature.properties.nbr);
     }
 
     //If clicked on a random place on the map, display default info    
     else if (feature.properties.type == undefined) {
-        document.getElementById('infobox_img').setAttribute('src', "https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=400w");
-        document.getElementById('Photo-Big').setAttribute('src', "https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=600w");
+        document.getElementById('infobox_img').setAttribute('src', "");
+        document.getElementById('Photo-Big').setAttribute('src', "");
     }
 });
 
 // makes HTML button clickable, with js consequenses
 document.getElementById("nextph").addEventListener('click', function(e) {
     selectedphoto.nbr = selectedphoto.nbr + 1;
-    NewPhotos(selectedphoto.nbr);
+    NewSelection(selectedphoto.nbr);
 });
 
 document.getElementById("prevph").addEventListener('click', function(e) {
     selectedphoto.nbr = selectedphoto.nbr - 1;
-    NewPhotos(selectedphoto.nbr);
+    NewSelection(selectedphoto.nbr);
 });
 
 document.getElementById("locph").addEventListener('click', function(e) {
@@ -117,7 +117,7 @@ document.getElementById("bigph").addEventListener('click', function(e) {
 function Fly(Long, Lat){
     map.flyTo({
         center: [Long, Lat],
-        zoom: (10)
+        zoom: (15)
     });
 };
 
@@ -134,16 +134,18 @@ function filterBy(SliderValue){
     var currentday
 
     //arrays of relevant valies compared to slider value. eg slider position 4 of datephotos = 2018-04-09 and position 4 of currentday = Maandag 
-    datephotos =        ["",            "2018-04-06",   "2018-04-07",   "2018-04-08",   "2018-04-09",   "2018-04-10",   "2018-04-11",   "2018-04-12",   "2018-04-13",   "2018-04-14",   "2018-04-15", ""          ];
-    dateroutesfrom =    ["",            "20180406",     "20180407",     "20180408",     "20180409",     "20180410",     "20180411",     "20180412",     "20180413",     "20180414",     "20180415",   ""          ];
-    dateroutesto =      ["",            "20180407",     "20180408",     "20180409",     "20180410",     "20180411",     "20180412",     "20180413",     "20180414",     "20180415",     "20180416",   ""          ];
-    currentday =        ["Alle dagen",  "Aankomst Dag", "Zaterdag",     "Zondag",       "Maandag",      "Dinsdag",      "Woensdag",     "Donderdag",    "Vrijdag",      "Zaterdag",     "Laaste dag", "Alle dagen"];
+    datephotos =        ["",            "2018-04-06",   "2018-04-07",   "2018-04-08",   "2018-04-09",   "2018-04-10",   "2018-04-11",   "2018-04-12",   "2018-04-13",   "2018-04-14",   "2018-04-15",   ""          ];
+    dateroutesfrom =    ["",            "20180406",     "20180407",     "20180408",     "20180409",     "20180410",     "20180411",     "20180412",     "20180413",     "20180414",     "20180415",     ""          ];
+    dateroutesto =      ["",            "20180407",     "20180408",     "20180409",     "20180410",     "20180411",     "20180412",     "20180413",     "20180414",     "20180415",     "20180416",     ""          ];
+    currentday =        ["Alle dagen",  "Aankomst Dag", "Zaterdag",     "Zondag",       "Maandag",      "Dinsdag",      "Woensdag",     "Donderdag",    "Vrijdag",      "Zaterdag",     "Laaste dag",   "Alle dagen"];
+    FistPhoto =         ["",            "",             "250",          "500",          "750",          "1000",         "1150",         "1400",         "1500",         "1800",         "1950",         ""];
 
     //exectution of filter by date
     if (slider > 0 && slider < 11) {
         map.setFilter('photos', ["==", "CreateDate", datephotos[slider]]);
         map.setFilter('routes', ["<=", "startTime", dateroutesto[slider]]);
         map.setFilter('routes-today', ["all", ["<=", "startTime", dateroutesto[slider]], [">=", "startTime", dateroutesfrom[slider]]]);
+        //NewSelection(FistPhoto);
     }
     else {
         map.setFilter('photos', null);
@@ -160,7 +162,7 @@ function filterBy(SliderValue){
 map.on("load", function initiatefilter() {
     //Initiate Filter
     filterBy("" + 0 + "");
-    NewPhotos(64);
+    NewSelection(64);
     //add event listener to HTML range slider
     document.getElementById('slider-start').addEventListener('input', function(e) {
         //code to be executed when event listener is triggerd
@@ -182,22 +184,26 @@ var prevphoto = {};
 var selectedphoto = {};
 var nextphoto = {};
 var carouselphotos = {};
-function NewPhotos(newmainphotonbr){
+function NewSelection(newmainphotonbr){
     //delete existing imgs form carousel
     var carousel = document.getElementById("main-carousel");
     while (carousel.hasChildNodes()) {
         carousel.removeChild(carousel.firstChild);
     }
 
-    //makes a loop to ad all img to carousel    
+    //set slider to the day corresponding to the photo
+    var SliderValue = 0;
+    document.getElementById('slider-start').value = SliderValue;
+    filterBy(SliderValue);
+
+    //makes a loop to add all img to carousel    
     var i;
-    for (i = newmainphotonbr - 5; i < newmainphotonbr+20; i++) { 
+    for (i = newmainphotonbr - 2; i < newmainphotonbr+15; i++) { 
         var newdiv = document.createElement('div');
         var position = newmainphotonbr - i
         newdiv.className = 'carousel-containter img' + position;
         newdiv.Name = i;
-        newdiv.onclick = "NewPhotos(i)";
-        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewPhotos(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
+        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
         
         document.getElementById('main-carousel').appendChild(newdiv);
         

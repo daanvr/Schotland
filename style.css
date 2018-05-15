@@ -50,7 +50,6 @@ div.img0 {
 
 .carousel-containter {
   height: 100%;
-  width: 50px;
   margin-left: 5px; 
   overflow: hidden;
   border-radius: 3px;
@@ -59,7 +58,6 @@ div.img0 {
 
 .carousel-img {
   height: 100%;
-  margin-left: -40%;
 }
 
 .Photo-Small {
@@ -81,6 +79,7 @@ img {
 .infobox_img_div {
   border-radius: 5px;
   background-color: transparent;
+  min-height: 33px;
 }
 
 .map-overlay-infobox{
