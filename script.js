@@ -137,7 +137,7 @@ function filterBy(SliderValue){
     datephotos =        ["",            "2018-04-06",   "2018-04-07",   "2018-04-08",   "2018-04-09",   "2018-04-10",   "2018-04-11",   "2018-04-12",   "2018-04-13",   "2018-04-14",   "2018-04-15",   ""          ];
     dateroutesfrom =    ["",            "20180406",     "20180407",     "20180408",     "20180409",     "20180410",     "20180411",     "20180412",     "20180413",     "20180414",     "20180415",     ""          ];
     dateroutesto =      ["",            "20180407",     "20180408",     "20180409",     "20180410",     "20180411",     "20180412",     "20180413",     "20180414",     "20180415",     "20180416",     ""          ];
-    currentday =        ["Alle dagen",  "Aankomst Dag", "Zaterdag",     "Zondag",       "Maandag",      "Dinsdag",      "Woensdag",     "Donderdag",    "Vrijdag",      "Zaterdag",     "Laaste dag",   "Alle dagen"];
+    currentday =        ["Hele reis",   "Aankomst Dag", "Zaterdag",     "Zondag",       "Maandag",      "Dinsdag",      "Woensdag",     "Donderdag",    "Vrijdag",      "Zaterdag",     "Laaste dag",   "Hele reis"];
     FistPhoto =         ["",            "",             "250",          "500",          "750",          "1000",         "1150",         "1400",         "1500",         "1800",         "1950",         ""];
 
     //exectution of filter by date
@@ -208,8 +208,6 @@ function NewSelection(newmainphotonbr){
         document.getElementById('main-carousel').appendChild(newdiv);
         
     };
-
-
 
     // prevphoto = {nbr:newmainphotonbr - 1, URLsmall:"", URL:""};
     // prevphoto.URLsmall = photoDB[prevphoto.nbr].URLsmall;
