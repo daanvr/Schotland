@@ -1,6 +1,6 @@
-//Mapbox initalisation
 var photoDB;
 
+//Mapbox initalisation
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGFhbnZyIiwiYSI6ImNpdTJmczN3djAwMHEyeXBpNGVndWtuYXEifQ.GYZf7r9gTfQL3W-GpmmJ3A';
 var map = new mapboxgl.Map({
     container: 'map',
@@ -70,6 +70,19 @@ map.on('load', function(e) {
 //changes cursor style when on clickable layer.
     map.on("mousemove", "photos", function(e) {map.getCanvas().style.cursor = 'pointer';});
     map.on('mouseleave', "photos", function() {map.getCanvas().style.cursor = '';});
+
+//     var results = {};
+// var toSearch = 1.234567;
+// for(var i=0; i < photoDB.length; i++) {
+//   for(Latitude in photoDB[i]) {
+//      var test = photoDB[i][Latitude].indexOf(toSearch);
+//      console.log(test);
+//     //  if(test!=-1) {
+//     //   results.push(photoDB[i]);
+//     // }
+//   }
+// }
+// console.log(results);
 });
 
 //this makes map features clickable and puts the data in theinfo box
@@ -180,6 +193,11 @@ xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) { photoDB = JSON.parse(this.responseText);}
 };
 
+
+
+
+
+
 var prevphoto = {};
 var selectedphoto = {};
 var nextphoto = {};
@@ -200,11 +218,11 @@ function NewSelection(newmainphotonbr){
     var i;
     for (i = newmainphotonbr - 2; i < newmainphotonbr+15; i++) { 
         var newdiv = document.createElement('div');
-        var position = newmainphotonbr - i
+        var position = i - newmainphotonbr;
         newdiv.className = 'carousel-containter img' + position;
         newdiv.Name = i;
         newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
-        
+        newdiv.idName = 'img' + position;
         document.getElementById('main-carousel').appendChild(newdiv);
         
     };
@@ -229,6 +247,10 @@ function NewSelection(newmainphotonbr){
     document.getElementById('infobox_img').setAttribute('src', selectedphoto.URLsmall);
     document.getElementById('Photo-Big').setAttribute('src', selectedphoto.URL);
     //document.getElementById('ph3').setAttribute('src', nextphoto.URL);
+
+
+    // document.getElementById('selectedimg').
+
 };
 
 function writephotovars(){
