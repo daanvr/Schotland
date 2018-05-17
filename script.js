@@ -46,9 +46,8 @@ map.on('load', function(e) {
         
         },
         "paint": {
-            "line-color": "#bbbbbb",
-            "line-width": 3,
-            "line-gap-width": 1
+            "line-color": "#4285F4",
+            "line-width": 6
 
         }
     }, 'photos'); // Place polygon under this labels.
@@ -61,28 +60,28 @@ map.on('load', function(e) {
         
         },
         "paint": {
-            "line-color": "#ffffff",
-            "line-width": 2,
-            "line-gap-width": 1
+            "line-color": "rgba(120, 180, 244, 1)",
+            "line-width": 4
         }
     }, 'routes-today'); // Place polygon under this labels.
+
+    map.addLayer({
+        "id": "routes-shadow",
+        "type": "line",
+        "source": "Scotland-Routes",
+        "layout": {
+        
+        },
+        "paint": {
+            "line-color": "#4285F4",
+            "line-width": 6
+        }
+    }, 'routes'); // Place polygon under this labels.
+
 
 //changes cursor style when on clickable layer.
     map.on("mousemove", "photos", function(e) {map.getCanvas().style.cursor = 'pointer';});
     map.on('mouseleave', "photos", function() {map.getCanvas().style.cursor = '';});
-
-//     var results = {};
-// var toSearch = 1.234567;
-// for(var i=0; i < photoDB.length; i++) {
-//   for(Latitude in photoDB[i]) {
-//      var test = photoDB[i][Latitude].indexOf(toSearch);
-//      console.log(test);
-//     //  if(test!=-1) {
-//     //   results.push(photoDB[i]);
-//     // }
-//   }
-// }
-// console.log(results);
 });
 
 //this makes map features clickable and puts the data in theinfo box
@@ -97,6 +96,8 @@ map.on('click', function (e) {
         document.getElementById('Photo-Big').setAttribute('src', feature.properties.URL);
         //set selected foto nbr to clicked photo nbr. for this to work the geojson data needst to be updated
         //NewSelection(feature.properties.nbr);
+        searchphotoDB(feature.properties.FileName);
+        console.log("name: " + feature.properties.FileName)
     }
 
     //If clicked on a random place on the map, display default info    
@@ -104,6 +105,7 @@ map.on('click', function (e) {
         document.getElementById('infobox_img').setAttribute('src', "");
         document.getElementById('Photo-Big').setAttribute('src', "");
     }
+
 });
 
 // makes HTML button clickable, with js consequenses
@@ -130,7 +132,7 @@ document.getElementById("bigph").addEventListener('click', function(e) {
 function Fly(Long, Lat){
     map.flyTo({
         center: [Long, Lat],
-        zoom: (15)
+        zoom: (10)
     });
 };
 
@@ -157,12 +159,14 @@ function filterBy(SliderValue){
     if (slider > 0 && slider < 11) {
         map.setFilter('photos', ["==", "CreateDate", datephotos[slider]]);
         map.setFilter('routes', ["<=", "startTime", dateroutesto[slider]]);
+        map.setFilter('routes-shadow', ["<=", "startTime", dateroutesto[slider]]);
         map.setFilter('routes-today', ["all", ["<=", "startTime", dateroutesto[slider]], [">=", "startTime", dateroutesfrom[slider]]]);
         //NewSelection(FistPhoto);
     }
     else {
         map.setFilter('photos', null);
         map.setFilter('routes', null);
+        map.setFilter('routes-shadow', null);
         map.setFilter('routes-today', ["<=", "startTime", 1]);
     }
     //set Day Lable to correct day 
@@ -216,7 +220,7 @@ function NewSelection(newmainphotonbr){
 
     //makes a loop to add all img to carousel    
     var i;
-    for (i = newmainphotonbr - 2; i < newmainphotonbr+15; i++) { 
+    for (i = newmainphotonbr - 2; i < newmainphotonbr + 15; i++) { 
         var newdiv = document.createElement('div');
         var position = i - newmainphotonbr;
         newdiv.className = 'carousel-containter img' + position;
@@ -224,22 +228,31 @@ function NewSelection(newmainphotonbr){
         newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
         newdiv.idName = 'img' + position;
         document.getElementById('main-carousel').appendChild(newdiv);
-        
     };
 
-    // prevphoto = {nbr:newmainphotonbr - 1, URLsmall:"", URL:""};
-    // prevphoto.URLsmall = photoDB[prevphoto.nbr].URLsmall;
-    // prevphoto.URL = photoDB[prevphoto.nbr].URL;
+        // var newdiv = document.createElement('div');
+        // var position = i - newmainphotonbr;
+        // newdiv.className = 'carousel-containter img' + position + ' carousel-info';
+        // newdiv.Name = i;
+        // newdiv.innerHTML = '<div class="carousel-info-text"><p>Woensdag</p></div>';
+        // newdiv.idName = 'img' + position;
+        // document.getElementById('main-carousel').appendChild(newdiv);
+
+    // for (i = newmainphotonbr + 4; i < newmainphotonbr+15; i++) { 
+    //         var newdiv = document.createElement('div');
+    //     var position = i - newmainphotonbr;
+    //     newdiv.className = 'carousel-containter img' + position;
+    //     newdiv.Name = i;
+    //     newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
+    //     newdiv.idName = 'img' + position;
+    //     document.getElementById('main-carousel').appendChild(newdiv);
+    // };
     
     selectedphoto = {nbr:newmainphotonbr, URLsmall:"", URL:""};
     selectedphoto.URLsmall = photoDB[selectedphoto.nbr].URLsmall;
     selectedphoto.URL = photoDB[selectedphoto.nbr].URL;
     selectedphoto.latitude = photoDB[selectedphoto.nbr].Latitude;
     selectedphoto.longitude = photoDB[selectedphoto.nbr].Longitude;
-
-    // nextphoto     = {nbr:newmainphotonbr + 1, URLsmall:"", URL:""};
-    // nextphoto.URLsmall = photoDB[nextphoto.nbr].URLsmall;
-    // nextphoto.URL = photoDB[nextphoto.nbr].URL;
 
     writephotovars();
 
@@ -255,10 +268,29 @@ function NewSelection(newmainphotonbr){
 
 function writephotovars(){
     console.log("selected photo info:");
-    // console.log(prevphoto);
     console.log(selectedphoto);
-    // console.log(nextphoto);
-    // console.log(photoDB);
 };
+
+
+
+function searchphotoDB(searchquery){
+    console.log("searching")
+    for (i = 0; i < 2003; i++) {
+        var a = photoDB[i].FileName;
+        if (a == searchquery) {
+            console.log(photoDB[i]);
+            NewSelection(photoDB[i].nbr);
+        }
+    };
+};
+
+
+
+
+
+
+
+
+
 
 

@@ -3,6 +3,47 @@ body {
     margin: 0px;
 }
 
+
+
+
+.img-btn-next {
+  width: 45px;
+  height: 100%;
+  background-color: rgba(0,0,0, 0);
+  position: absolute;
+  right: 0px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.img-btn-next:hover {
+  background-color: rgba(0,0,0, 0.4);
+}
+
+.img-btn-prev {
+  width: 45px;
+  height: 100%;
+  background-color: rgba(0,0,0, 0);
+  position: absolute;
+  left: 0px;
+  color: white;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.img-btn-prev:hover {
+  background-color: rgba(0,0,0, 0.4);
+}
+
+h1 {
+  font: 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+  position: relative;
+  top: calc(50% - 1.3em);
+}
+
 .img-btn {
 position: absolute;
 top: 5px;
@@ -45,6 +86,26 @@ div.img-2 {
   margin-left: -20px;
 }
 
+.carousel-info {
+  width: 10px;
+  height: 120px !important;
+  margin-top: -20px;
+  background-color: rgba(120, 230, 120, 1);
+  overflow: visible !important;
+  box-shadow: 0px 0px 4px rgba(1, 1, 1, 0.9);
+
+}
+
+.carousel-info-text {
+  transform: translate(0px, -20px);
+  background-color: rgba(120, 230, 120, 1);
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0px 0px 4px rgba(1, 1, 1, 0.9);
+
+}
+
 .img0 {
 }
 
@@ -52,7 +113,7 @@ div.img-2 {
   position: fixed;
   width: 1000vw;
   height: 100px;
-  bottom: 50px;
+  bottom: 35px;
   background-color: rgba(255, 255, 255, 0.5);
   /*overflow: hidden;*/
   padding-top: 5px;
@@ -121,18 +182,18 @@ img {
 .map-overlay-yearsliderbox {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     position: fixed;
-    width: 90vw;
+    width: 20vw;
     height: 0px;
-    left: 50%;
-    transform: translate(-45%,  0%);
+    /*left: 50%;*/
+    /*transform: translate(-45%,  0%);*/
     /*top: calc(100vh - 105px - 37px);*/
-    bottom: 10px;
 }
 .map-overlay-yearsliderbox {
     /*background-color: rgba(78, 78, 86, 0.7);*/
     height: 0px;
     padding: 0px;
-    bottom: 35px;
+    top: 20px;
+    right: 35px;
 
 }
 .map-overlay-infobox {
@@ -159,7 +220,7 @@ img {
     
 .map-overlay-yearbox {
     position: fixed;
-    top: 15px;
+    top: 35px;
     right: 53px;
     padding: 10px;
     background-color: transparent;
