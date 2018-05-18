@@ -130,6 +130,7 @@ top: 40%;
     flex-wrap: nowrap;
     overflow-x: scroll;
     overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch; /*make IOs scroling smooth*/
 }
 
 .carousel-containter {
