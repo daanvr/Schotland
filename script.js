@@ -258,7 +258,7 @@ function LoadGEOJsonSources() {
         "data": "https://daanvr.github.io/Schotland/Routes.geojson"
     });
 
-    DisplayGEOJsonLayers();  //Now that the sources are loaded, have the Layers loaded
+    AddMapIcon(); // add img to be used as icon for layer
 };
 
 //Displaying geojson data from the previously laoded sources
@@ -269,8 +269,8 @@ function DisplayGEOJsonLayers(){
         "type": "symbol",
         "source": "Scotland-Foto",
         "layout": {
-            "icon-image": "attraction-15",
-            "icon-size": 1.25,
+            "icon-image": "CustomPhoto",
+            "icon-size": 0.4,
             "icon-padding": 0,
             "icon-allow-overlap":true
         },
@@ -331,9 +331,11 @@ function ClickbleMapItemCursor(){
 
 
 function AddMapIcon() {
-    map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
-    if (error) throw error;
-    map.addImage('cat', image);
+    map.loadImage('https://daanvr.github.io/Schotland/photo.png', function(error, image) {
+        if (error) throw error;
+        map.addImage('CustomPhoto', image);
+    });
+    DisplayGEOJsonLayers();  //Now that the sources are loaded, have the Layers loaded
 };
 
 
