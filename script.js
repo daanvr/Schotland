@@ -1,5 +1,7 @@
 //Set global variables
 var photoDB;
+var selectedphoto;
+var previouslyselectedphoto;
 
 //load json file as static databse and stores the data in the "photoDB" js object
 var photoDB;
@@ -19,6 +21,7 @@ var map = new mapboxgl.Map({
     zoom: 6,
     bearing: 0,
     pitch: 0.5,
+    attributionControl: false
 });
 
 //adds map controls to the map
@@ -28,11 +31,10 @@ map.addControl(new mapboxgl.NavigationControl());
 map.on("load", function initiatefilter() {
     LoadGEOJsonSources();  //this loads the geojson sources, then loads the layser and then makes the mouse currsor change when hovering the "clickable" layers
     filterBy("" + 0 + "");  //Initiate Filter
-    NewSelection(64);  //Initiates selected img
     LoadCarouselImgs();  //loads imgs in carousel
     SliderListener();  //Call function to set event lisner to html for the day range selector
+    NewSelection(undefined);  //Initiates selected img
 });
-
 
 //Make map features clickable
 //& puts the data in theinfo box
@@ -49,6 +51,9 @@ map.on('click', function (e) {
         //NewSelection(feature.properties.nbr);
         searchphotoDB(feature.properties.FileName);
         console.log("name: " + feature.properties.FileName)
+    } else {
+        document.getElementById('map-overlay-infobox').style.visibility = 'hidden';
+        NewSelection();
     }
 });
 
@@ -88,38 +93,65 @@ function filterBy(SliderValue){
 };
 
 //function used to set a new selection. it upadates the img in the top left, set slider day filter to 0 and logs selected img info
-var prevphoto = {};
-var selectedphoto = {};
-var nextphoto = {};
-var carouselphotos = {};
 function NewSelection(newmainphotonbr){
-    //set slider to all days
-    var SliderValue = 0;
-    document.getElementById('slider-start').value = SliderValue;
-    filterBy(SliderValue);
+    if (newmainphotonbr != undefined) {
+        //set slider to all days
+        var SliderValue = 0;
+        document.getElementById('slider-start').value = SliderValue;
+        filterBy(SliderValue);
 
-    //load varibales from new selected photo to 
-    selectedphoto = {nbr:newmainphotonbr, URLsmall:"", URL:""};
-    selectedphoto.URLsmall = photoDB[selectedphoto.nbr].URLsmall;
-    selectedphoto.URL = photoDB[selectedphoto.nbr].URL;
-    selectedphoto.latitude = photoDB[selectedphoto.nbr].Latitude;
-    selectedphoto.longitude = photoDB[selectedphoto.nbr].Longitude;
+        //copie varibles from previously selected photo
+        previouslyselectedphoto = selectedphoto
 
-    //set variables from new selection to UI 
-    document.getElementById('infobox_img').setAttribute('src', selectedphoto.URLsmall);
-    document.getElementById('Photo-Big').setAttribute('src', selectedphoto.URL);
+        //load varibales from new selected photo to
+        selectedphoto = {nbr:newmainphotonbr, URLsmall:"", URL:""};
+        selectedphoto.htmlid = "img" + selectedphoto.nbr;
+        selectedphoto.DOM = document.getElementById(selectedphoto.htmlid);
+        selectedphoto.URLsmall = photoDB[selectedphoto.nbr].URLsmall;
+        selectedphoto.URL = photoDB[selectedphoto.nbr].URL;
+        selectedphoto.latitude = photoDB[selectedphoto.nbr].Latitude;
+        selectedphoto.longitude = photoDB[selectedphoto.nbr].Longitude;
 
-    //call function to write in consol the variable from new selection
-    writephotovars();
+        //set variables from new selection to UI 
+        document.getElementById('infobox_img').setAttribute('src', selectedphoto.URLsmall);
+        document.getElementById('Photo-Big').setAttribute('src', selectedphoto.URL);
+        document.getElementById('map-overlay-infobox').style.visibility = 'visible';
 
-    //this code was temporarly used to expiriment with other valuse than photos in carousel. This might be usefull in the future
-        // var newdiv = document.createElement('div');
-        // var position = i - newmainphotonbr;
-        // newdiv.className = 'carousel-containter img' + position + ' carousel-info';
-        // newdiv.Name = i;
-        // newdiv.innerHTML = '<div class="carousel-info-text"><p>Woensdag</p></div>';
-        // newdiv.idName = 'img' + position;
-        // document.getElementById('main-carousel').appendChild(newdiv);
+        //call function to write in consol the variable from new selection
+        writephotovars();
+
+        //remove previously applyed CSS fo select photo
+        if (previouslyselectedphoto != undefined) {
+            var oldactivedivclassimgcontainer = [].slice.apply(document.getElementsByClassName("active"));
+            for (var i = 0; i < oldactivedivclassimgcontainer.length; i++) {
+                oldactivedivclassimgcontainer[i].className = oldactivedivclassimgcontainer[i].className.replace(/ *\b active\b/g, "");
+            }       
+        }
+
+        //make selected photo pop out of the carousel ussing CSS
+        selectedphoto.DOM.className += " active";
+
+        //Scroll to correct posittion
+        document.getElementById('main-carousel').scrollLeft = selectedphoto.DOM.offsetLeft - 400;
+
+        //this code was temporarly used to expiriment with other valuse than photos in carousel. This might be usefull in the future
+            // var newdiv = document.createElement('div');
+            // var position = i - newmainphotonbr;
+            // newdiv.className = 'carousel-containter img' + position + ' carousel-info';
+            // newdiv.Name = i;
+            // newdiv.innerHTML = '<div class="carousel-info-text"><p>Woensdag</p></div>';
+            // newdiv.idName = 'img' + position;
+            // document.getElementById('main-carousel').appendChild(newdiv);
+    
+    } else {
+        //remove previously applyed CSS fo select photo
+        if (selectedphoto != undefined) {
+            var oldactivedivclassimgcontainer = [].slice.apply(document.getElementsByClassName("active"));
+            for (var i = 0; i < oldactivedivclassimgcontainer.length; i++) {
+                oldactivedivclassimgcontainer[i].className = oldactivedivclassimgcontainer[i].className.replace(/ *\b active\b/g, "");
+            }       
+        }
+    }    
 };
 
 // function used to log the selected foto info to the consol
@@ -149,7 +181,8 @@ function LoadCarouselImgs(){
         newdiv.className = 'carousel-containter img' + position;
         newdiv.Name = i;
         newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
-        newdiv.idName = 'img' + position;
+        idname = "img" + position;
+        newdiv.setAttribute("id", idname);
         document.getElementById('main-carousel').appendChild(newdiv);
     };
 }
@@ -276,6 +309,14 @@ function ClickbleMapItemCursor(){
     map.on('mouseleave', "photos", function() {map.getCanvas().style.cursor = '';});
 
 };
+
+
+
+
+
+
+
+
 
 
 
