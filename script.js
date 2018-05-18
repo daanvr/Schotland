@@ -186,6 +186,18 @@ map.on("load", function initiatefilter() {
         var SliderValue = "" + parseInt(e.target.value, 10) + "" //create vare with range slider value
         filterBy(SliderValue);  //trigger Fiter function adn send varibale with it.
    });
+
+        var i;
+    for (i = 0; i < 2003; i++) { 
+        var newdiv = document.createElement('div');
+        var position = i;
+        newdiv.className = 'carousel-containter img' + position;
+        newdiv.Name = i;
+        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
+        newdiv.idName = 'img' + position;
+        document.getElementById('main-carousel').appendChild(newdiv);
+    };
+
 });
 
 //load json file as static databse and store data in the photoDB var
@@ -207,28 +219,13 @@ var selectedphoto = {};
 var nextphoto = {};
 var carouselphotos = {};
 function NewSelection(newmainphotonbr){
-    //delete existing imgs form carousel
-    var carousel = document.getElementById("main-carousel");
-    while (carousel.hasChildNodes()) {
-        carousel.removeChild(carousel.firstChild);
-    }
-
     //set slider to the day corresponding to the photo
     var SliderValue = 0;
     document.getElementById('slider-start').value = SliderValue;
     filterBy(SliderValue);
 
     //makes a loop to add all img to carousel    
-    var i;
-    for (i = newmainphotonbr - 2; i < newmainphotonbr + 15; i++) { 
-        var newdiv = document.createElement('div');
-        var position = i - newmainphotonbr;
-        newdiv.className = 'carousel-containter img' + position;
-        newdiv.Name = i;
-        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ')"  name="' + i + '"src="' + photoDB[i].URLsmall + '">';
-        newdiv.idName = 'img' + position;
-        document.getElementById('main-carousel').appendChild(newdiv);
-    };
+
 
         // var newdiv = document.createElement('div');
         // var position = i - newmainphotonbr;
@@ -260,11 +257,13 @@ function NewSelection(newmainphotonbr){
     document.getElementById('infobox_img').setAttribute('src', selectedphoto.URLsmall);
     document.getElementById('Photo-Big').setAttribute('src', selectedphoto.URL);
     //document.getElementById('ph3').setAttribute('src', nextphoto.URL);
-
-
     // document.getElementById('selectedimg').
-
 };
+
+
+
+
+
 
 function writephotovars(){
     console.log("selected photo info:");
@@ -279,7 +278,7 @@ function searchphotoDB(searchquery){
         var a = photoDB[i].FileName;
         if (a == searchquery) {
             console.log(photoDB[i]);
-            NewSelection(photoDB[i].nbr);
+            NewSelection(photoDB[i-2].nbr);
         }
     };
 };
