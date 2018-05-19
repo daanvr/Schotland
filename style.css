@@ -89,6 +89,11 @@ top: 40%;
   background-color: rgba(240, 240, 235, 0.8);
 }
 
+.carousel-containter:hover {
+  max-width: none;
+
+}
+
 .carousel-containter {
   height: 100px;
   margin: 30px 0px 5px 5px; 
@@ -97,6 +102,9 @@ top: 40%;
   float: left;
   box-shadow: 0px 0px 4px rgba(1, 1, 1, 0.3);
   flex: 0 0 auto;
+  max-width: 100px;
+  -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+  transition: width 1s;
 }
 
 .carousel-img {

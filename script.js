@@ -34,6 +34,7 @@ map.on("load", function initiatefilter() {
     LoadCarouselImgs();  //loads imgs in carousel
     SliderListener();  //Call function to set event lisner to html for the day range selector
     NewSelection(1);  //Initiates selected img
+    ImgHoverListener();
 });
 
 //Make map features clickable
@@ -149,6 +150,9 @@ function NewSelection(newmainphotonbr){
         newdiv.setAttribute("id", "imginfo");
         selectedphoto.DOM.appendChild(newdiv);
 
+
+        NewSelectedMapLocation(selectedphoto.longitude, selectedphoto.latitude);
+
         //this code was temporarly used to expiriment with other valuse than photos in carousel. This might be usefull in the future
             // var newdiv = document.createElement('div');
             // var position = i - newmainphotonbr;
@@ -258,6 +262,12 @@ function LoadGEOJsonSources() {
         "data": "https://daanvr.github.io/Schotland/Routes.geojson"
     });
 
+    var data = JSON.parse('{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[-5.096936,57.149319]},"properties":{"FileName":"IMG_8571","type":"Foto","FileTypeExtension":"jpg","SourceFile":"/Users/daan/Downloads/Schotlandexpiriment/IMG_8571.JPG","CreateDate":"2018-04-13","CreateTime":"15:15:34","Make":"Apple","Model":"iPhoneSE","ImageSize":"16382x3914","Duration":"","Altitude":"276","URL":"https://farm1.staticflickr.com/823/26804084787_f45be76bc3_o.jpg","URLsmall":"https://farm1.staticflickr.com/823/26804084787_939dd60ebc.jpg"}}]}');
+    map.addSource('SelectedMapLocationSource', {
+        type: "geojson",
+        data: data,
+    });
+
     AddMapIcon(); // add img to be used as icon for layer
 };
 
@@ -270,7 +280,8 @@ function DisplayGEOJsonLayers(){
         "source": "Scotland-Foto",
         "layout": {
             "icon-image": "CustomPhoto",
-            "icon-size": 0.4,
+            "icon-size": 1,
+            "icon-offset": [0, -17],
             "icon-padding": 0,
             "icon-allow-overlap":true
         },
@@ -318,7 +329,23 @@ function DisplayGEOJsonLayers(){
         }
     }, 'routes'); // Place polygon under this labels.
 
+    map.addLayer({"id": "SelectedMapLocationLayer",
+        "type": "symbol",
+        "source": "SelectedMapLocationSource",
+        "layout": {
+            "icon-image": "CustomPhotoSelected",
+            "icon-size": 1,
+            "icon-offset": [0, -17],
+            "icon-padding": 0,
+            "icon-allow-overlap":true
+        },
+        "paint": {
+            "icon-opacity": 1
+        }
+    }, 'country-label-lg');
     ClickbleMapItemCursor(); //Now that the layers a loaded, have the mouse cursor change when hovering some of the layers
+    NewSelectedMapLocation();
+
 };
 
 //making "clickble" layers on the map change the mouse cursor. This helps the user see an map item is clickble.
@@ -335,17 +362,34 @@ function AddMapIcon() {
         if (error) throw error;
         map.addImage('CustomPhoto', image);
     });
+
+    map.loadImage('https://daanvr.github.io/Schotland/photo-selected.png', function(error, image) {
+        if (error) throw error;
+        map.addImage('CustomPhotoSelected', image);
+    });
+
     DisplayGEOJsonLayers();  //Now that the sources are loaded, have the Layers loaded
 };
 
 
+function NewSelectedMapLocation(Long, Lat) {
+    var data = JSON.parse('{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[-5.096936,57.149319]},"properties":{"FileName":"IMG_8571","type":"Foto","FileTypeExtension":"jpg","SourceFile":"/Users/daan/Downloads/Schotlandexpiriment/IMG_8571.JPG","CreateDate":"2018-04-13","CreateTime":"15:15:34","Make":"Apple","Model":"iPhoneSE","ImageSize":"16382x3914","Duration":"","Altitude":"276","URL":"https://farm1.staticflickr.com/823/26804084787_f45be76bc3_o.jpg","URLsmall":"https://farm1.staticflickr.com/823/26804084787_939dd60ebc.jpg"}}]}');
+    var coordinates = data.features[0].geometry.coordinates;
+    data.features[0].geometry.coordinates = [Long, Lat];
+    map.getSource('SelectedMapLocationSource').setData(data)
+    console.log("NewSelectedMapLocation");
+};
 
-
-
-
-
-
-
+function ImgHoverListener() {
+    var i;
+    for (i = 0; i < 2003; i++) { 
+        var ID = "img" + i;
+        Long = photoDB[i].Longitude;
+        Lat = photoDB[i].Latitude;
+        LongLat = Long + ", " + Lat
+        document.getElementById(ID).setAttribute('onmouseover', "NewSelectedMapLocation(" + LongLat + ")");
+    };
+};
 
 
 
