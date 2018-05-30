@@ -18,8 +18,12 @@
         <div class="img-btn-next" id="nextph"><h1>&#8250;</h1></div>
         <div class="img-btn-prev" id="prevph"><h1>&#8249;</h1></div>
         <!-- <button class="img-btn prevph" id="prevph"><h1>&#8249;</h1></button> -->
-        <button class="img-btn bigph" id="bigph">Big</button>
-        <button class="img-btn locph" id="locph">location</button>
+        <button class="img-btn bigph" id="bigph">
+          <img id="bigger" src="https://daanvr.github.io/Schotland/bigger.png">
+        </button>
+        <button class="img-btn locph" id="locph">
+          <img id="location" src="https://daanvr.github.io/Schotland/photo.png">
+        </button>
 <!--         <button class="img-btn nextph" id="nextph"><h1>&#8250;</h1></button>-->
         <a class="Photo-Small" onclick="document.getElementById('Photo-Big-Background').style.display = 'inline'">
           <img id="infobox_img" src="">
@@ -48,7 +52,19 @@
   <!-- if you click next to the big photo it closes the big foto -->
   <div id="Photo-Big-Background"> <button id="Photo-Big-Background_btn" type="button" onclick="document.getElementById('Photo-Big-Background').style.display = 'none'"></button>
       <!-- this div contains the big photo -->
-      <div class='Photo-Big-container'> <img id='Photo-Big' src="https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=600w"></div>  
+      <div class='Photo-Big-container'> 
+
+        <img id='Photo-Big' src="https://static1.squarespace.com/static/5846811b5016e18b4f9999a2/t/58481cc5e58c6289807c1619/1481121486133/?format=600w">
+
+        <div class="img-btn-prev-big" id="prevphbig">
+          <h1>&#8249;</h1>
+        </div>
+        <div class="img-btn-next-big" id="nextphbig">
+          <h1>&#8250;</h1>
+        </div>
+        
+
+      </div>  
       <!-- back btn -->
       <button type="button" class="done_btn" onclick="document.getElementById('Photo-Big-Background').style.display = 'none'">Terug</button>
   </div>

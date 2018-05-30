@@ -46,8 +46,8 @@ map.on('click', function (e) {
 
     //If clicked on a photo, display photo info 
     if (feature.properties.type == "Foto") {
-        if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
-        document.getElementById('Photo-Big').setAttribute('src', feature.properties.URL);
+        //if (feature.properties.URLsmall != undefined) {document.getElementById('infobox_img').setAttribute('src', feature.properties.URLsmall); };
+        //document.getElementById('Photo-Big').setAttribute('src', feature.properties.URL);
         //set selected foto nbr to clicked photo nbr. for this to work the geojson data needst to be updated
         //NewSelection(feature.properties.nbr);
         searchphotoDB(feature.properties.FileName);
@@ -91,6 +91,12 @@ function filterBy(SliderValue){
     document.getElementById("daylable").textContent = currentday[slider];  //set Day Lable to correct day 
     //console.log("Filtering: " + currentday[slider]); //Filtering confimration in console
 
+    map.flyTo({
+        center: [-4.337799, 56.907900],
+        zoom: 6.5,
+        bearing: 0,
+        pitch: 0.5,
+    });
 };
 
 //function used to set a new selection. it upadates the img in the top left, set slider day filter to 0 and logs selected img info
@@ -143,10 +149,20 @@ function NewSelection(newmainphotonbr){
         document.getElementById('main-carousel').scrollLeft = selectedphoto.DOM.offsetLeft - 400;
 
         //load img info
+        var datephotos =        ["",            "2018-04-06",   "2018-04-07",   "2018-04-08",   "2018-04-09",   "2018-04-10",   "2018-04-11",   "2018-04-12",   "2018-04-13",   "2018-04-14",   "2018-04-15",   ""          ];
+        var currentday =        ["Hele reis",   "Aankomst Dag", "Zaterdag",     "Zondag",       "Maandag",      "Dinsdag",      "Woensdag",     "Donderdag",    "Vrijdag",      "Zaterdag",     "Laaste dag",   "Hele reis"];
         var newdiv = document.createElement('div');
         var position = i;
+        var date = photoDB[newmainphotonbr].CreateDate;
+        var time = photoDB[newmainphotonbr].CreateTime.substring(0,5);
+        for (var i = 0; i < datephotos.length; i++) {
+            if (date == datephotos[i]) {
+                date = currentday[i]
+            }
+        }
+
         newdiv.className = 'imginfo';
-        newdiv.innerHTML = '<p>' + photoDB[newmainphotonbr].CreateDate + '</p><p>' + photoDB[newmainphotonbr].CreateTime + '</p>';
+        newdiv.innerHTML = '<p>' + date +  '</p><p>' + time + '</p>';
         newdiv.setAttribute("id", "imginfo");
         selectedphoto.DOM.appendChild(newdiv);
 
@@ -240,6 +256,16 @@ function HTMLbtnsClick() {
         NewSelection(selectedphoto.nbr);
     });
 
+    document.getElementById("nextphbig").addEventListener('click', function(e) {
+        selectedphoto.nbr = selectedphoto.nbr + 1;
+        NewSelection(selectedphoto.nbr);
+    });
+
+    document.getElementById("prevphbig").addEventListener('click', function(e) {
+        selectedphoto.nbr = selectedphoto.nbr - 1;
+        NewSelection(selectedphoto.nbr);
+    });
+
     document.getElementById("locph").addEventListener('click', function(e) {
         Long = photoDB[selectedphoto.nbr].Longitude;
         Lat = photoDB[selectedphoto.nbr].Latitude;
@@ -301,7 +327,7 @@ function DisplayGEOJsonLayers(){
             "line-color": "#4285F4",
             "line-width": 6
         }
-    }, 'photos'); // Place polygon under this labels.
+    }, 'housenum-label'); // Place polygon under this labels.
 
     map.addLayer({
         //rout layer
@@ -329,7 +355,36 @@ function DisplayGEOJsonLayers(){
         }
     }, 'routes'); // Place polygon under this labels.
 
-    map.addLayer({"id": "SelectedMapLocationLayer",
+        map.addLayer({
+        //rout layer
+        "id": "walked",
+        "type": "line",
+        "source": "Scotland-Routes",
+        "filter": ["==", "activities", "walking"],
+        "layout": {
+        },
+        "paint": {
+            "line-color": "rgba(80, 200, 50, 1)",
+            "line-width": 4
+        }
+    }, 'routes-today'); // Place polygon under this labels.
+
+    map.addLayer({
+        //layer used to create lins(borders) arround rout
+        "id": "walked-shadow",
+        "type": "line",
+        "source": "Scotland-Routes",
+        "filter": ["==", "activities", "walking"],
+        "layout": {
+        },
+        "paint": {
+            "line-color": "#4285F4",
+            "line-width": 6
+        }
+    }, 'walked'); // Place polygon under this labels.
+
+    map.addLayer({
+        "id": "SelectedMapLocationLayer",
         "type": "symbol",
         "source": "SelectedMapLocationSource",
         "layout": {

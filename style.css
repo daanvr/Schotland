@@ -34,11 +34,52 @@ body {
   font-weight: bold;
   font-family: sans-serif;
   text-align: center;
+  z-index: 150;
+
+}
+
+.img-btn-prev-big:hover {
+  background-color: rgba(0,0,0, 0.4);
+}
+
+
+.img-btn-next-big {
+  width: 45px;
+  height: 100%;
+  background-color: rgba(0,0,0, 0);
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-family: sans-serif;
+  z-index: 150;
+}
+
+.img-btn-next-big:hover {
+  background-color: rgba(0,0,0, 0.4);
+}
+
+.img-btn-prev-big {
+  width: 45px;
+  height: 100%;
+  background-color: rgba(0,0,0, 0);
+  position: absolute;
+  left: 0px;
+  color: white;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-align: center;
+  bottom: 0px;
+
 }
 
 .img-btn-prev:hover {
   background-color: rgba(0,0,0, 0.4);
 }
+
+
 
 h1 {
   font: 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
@@ -62,11 +103,27 @@ top: 40%;
 }
 
 .bigph {
-left: 35%;
+left: calc(100% + 5px);
+bottom: 0px;
+top: unset;
+padding: 4px;
+}
+
+#bigger {
+  max-width: 25px;
+  max-height: 25px;
 }
 
 .locph {
-right: 30%
+  left: calc(100% + 43px);
+  bottom: 0px;
+  top: unset;
+  padding: 4px;
+}
+
+#location {
+  max-width: 25px;
+  max-height: 25px;
 }
 
 .nextph {
@@ -89,11 +146,6 @@ top: 40%;
   background-color: rgba(240, 240, 235, 0.8);
 }
 
-.carousel-containter:hover {
-  max-width: none;
-
-}
-
 .carousel-containter {
   height: 100px;
   margin: 30px 0px 5px 5px; 
@@ -102,13 +154,13 @@ top: 40%;
   float: left;
   box-shadow: 0px 0px 4px rgba(1, 1, 1, 0.3);
   flex: 0 0 auto;
-  max-width: 100px;
-  -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
-  transition: width 1s;
+  /*max-width: 100px;*/
 }
 
 .carousel-img {
   height: 100%;
+  /*transform: translate(calc(-50% + 50px), 0px);*/
+
 }
 
 .imginfo {
@@ -420,16 +472,18 @@ padding-bottom: 1em;
     }
     #Photo-Big {
       display: inline;
-      position: fixed;
       margin: auto;
       padding: 0px;
-      max-width: 95vw;
-      max-height: 95vh;
       z-index: 3;
+      max-width: 80vw;
+      max-height: 80vh;
+/*
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-    }
+      position: fixed;
+
+*/    }
 
     #contribute_iframe {
       position: fixed;
@@ -477,12 +531,7 @@ padding-bottom: 1em;
 
 .Photo-Big-container {
 position: fixed;
-/*padding-bottom: 56.25%;*/
-padding-top: 30px; 
-max-height: 80vh;
-max-width: 80vw;
-/*overflow: hidden;
-*/z-index: 3;
+z-index: 3;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
