@@ -2,6 +2,10 @@
 var photoDB;
 var selectedphoto;
 var previouslyselectedphoto;
+var vw = window.innerHeight;
+var vh = window.innerWidth;
+console.log(vw);
+console.log(vh);
 
 //load json file as static databse and stores the data in the "photoDB" js object
 var photoDB;
@@ -33,8 +37,8 @@ map.on("load", function initiatefilter() {
     filterBy("" + 0 + "");  //Initiate Filter
     LoadCarouselImgs();  //loads imgs in carousel
     SliderListener();  //Call function to set event lisner to html for the day range selector
-    NewSelection(1);  //Initiates selected img
-    ImgHoverListener();
+    NewSelection(1, 0);  //Initiates selected img
+    //ImgHoverListener();
 });
 
 //Make map features clickable
@@ -54,7 +58,7 @@ map.on('click', function (e) {
         //console.log("name: " + feature.properties.FileName)
     } else {
         document.getElementById('map-overlay-infobox').style.visibility = 'hidden';
-        NewSelection(undefined);
+        NewSelection(undefined, 0);
     }
 });
 
@@ -100,7 +104,7 @@ function filterBy(SliderValue){
 };
 
 //function used to set a new selection. it upadates the img in the top left, set slider day filter to 0 and logs selected img info
-function NewSelection(newmainphotonbr){
+function NewSelection(newmainphotonbr, movecarousel){
     if (newmainphotonbr != undefined) {
         //set slider to all days
         var SliderValue = 0;
@@ -111,22 +115,22 @@ function NewSelection(newmainphotonbr){
         previouslyselectedphoto = selectedphoto
 
         //load varibales from new selected photo to
-        selectedphoto = {nbr:newmainphotonbr, URLsmall:"", URL:""};
+        selectedphoto = {nbr:newmainphotonbr, imgurls:"", imgurlb:""};
         selectedphoto.htmlid = "img" + selectedphoto.nbr;
         selectedphoto.imgid = "imgID" + selectedphoto.nbr;
         selectedphoto.DOM = document.getElementById(selectedphoto.htmlid);
         selectedphoto.imgDOM = document.getElementById(selectedphoto.imgid);
-        selectedphoto.URLsmall = photoDB[selectedphoto.nbr].URLsmall;
-        selectedphoto.URL = photoDB[selectedphoto.nbr].URL;
-        selectedphoto.latitude = photoDB[selectedphoto.nbr].Latitude;
-        selectedphoto.longitude = photoDB[selectedphoto.nbr].Longitude;
+        selectedphoto.imgurls = photoDB[selectedphoto.nbr].imgurls;
+        selectedphoto.Imgurlb = photoDB[selectedphoto.nbr].Imgurlb;
+        selectedphoto.latitude = photoDB[selectedphoto.nbr].GPSLatitude;
+        selectedphoto.longitude = photoDB[selectedphoto.nbr].GPSLongitude;
 
         //set variables from new selection to UI 
-        document.getElementById('infobox_img').setAttribute('src', selectedphoto.URLsmall);
-        document.getElementById('Photo-Big').setAttribute('src', selectedphoto.URL);
+        document.getElementById('infobox_img').setAttribute('src', selectedphoto.imgurls);
+        document.getElementById('Photo-Big').setAttribute('src', selectedphoto.Imgurlb);
         document.getElementById('map-overlay-infobox').style.visibility = 'visible';
 
-        //writephotovars();  //call function to write in consol the variable from new selection
+        writephotovars();  //call function to write in consol the variable from new selection
 
         //remove previously applyed CSS fo select photo
         if (previouslyselectedphoto != undefined) {
@@ -146,15 +150,18 @@ function NewSelection(newmainphotonbr){
 
 
         //Scroll to correct posittion
-        document.getElementById('main-carousel').scrollLeft = selectedphoto.DOM.offsetLeft - 400;
+        if (movecarousel == 1) {
+        console.log(movecarousel);        
+            document.getElementById('main-carousel').scrollLeft = selectedphoto.DOM.offsetLeft - 400;
+        }
 
         //load img info
-        var datephotos =        ["",            "2018-04-06",   "2018-04-07",   "2018-04-08",   "2018-04-09",   "2018-04-10",   "2018-04-11",   "2018-04-12",   "2018-04-13",   "2018-04-14",   "2018-04-15",   ""          ];
+        var datephotos =        ["",            "20180406",   "20180407",   "20180408",   "20180409",   "20180410",   "20180411",   "20180412",   "20180413",   "20180414",   "20180415",   ""          ];
         var currentday =        ["Hele reis",   "Aankomst Dag", "Zaterdag",     "Zondag",       "Maandag",      "Dinsdag",      "Woensdag",     "Donderdag",    "Vrijdag",      "Zaterdag",     "Laaste dag",   "Hele reis"];
         var newdiv = document.createElement('div');
         var position = i;
-        var date = photoDB[newmainphotonbr].CreateDate;
-        var time = photoDB[newmainphotonbr].CreateTime.substring(0,5);
+        var date = photoDB[newmainphotonbr].Date;
+        var time = photoDB[newmainphotonbr].Time;
         for (var i = 0; i < datephotos.length; i++) {
             if (date == datephotos[i]) {
                 date = currentday[i]
@@ -206,7 +213,7 @@ function searchphotoDB(searchquery){
         var a = photoDB[i].FileName;
         if (a == searchquery) {
             //console.log(photoDB[i].FileName);
-            NewSelection(photoDB[i-2].nbr);
+            NewSelection(photoDB[i-2].nbr, 1);
         }
     };
 };
@@ -214,15 +221,16 @@ function searchphotoDB(searchquery){
 //loads all imgs in carousel
 function LoadCarouselImgs(){
         var i;
-    for (i = 0; i < 2003; i++) { 
+    for (i = 0; i < photoDB.length; i++) { 
         var newdiv = document.createElement('div');
         var position = i;
         newdiv.className = 'carousel-containter img' + position;
         newdiv.Name = i;
-        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ')"  id="imgID' + i + '"src="' + photoDB[i].URLsmall + '">';
+        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ', 0)"  id="imgID' + i + '"src="' + photoDB[i].imgurls + '">';
         idname = "img" + position;
         newdiv.setAttribute("id", idname);
         document.getElementById('main-carousel').appendChild(newdiv);
+        //console.log(i)
     };
 }
 
@@ -248,27 +256,27 @@ function HTMLbtnsClick() {
 // makes HTML button clickable, with js consequenses
     document.getElementById("nextph").addEventListener('click', function(e) {
         selectedphoto.nbr = selectedphoto.nbr + 1;
-        NewSelection(selectedphoto.nbr);
+        NewSelection(selectedphoto.nbr, 0);
     });
 
     document.getElementById("prevph").addEventListener('click', function(e) {
         selectedphoto.nbr = selectedphoto.nbr - 1;
-        NewSelection(selectedphoto.nbr);
+        NewSelection(selectedphoto.nbr, 0);
     });
 
     document.getElementById("nextphbig").addEventListener('click', function(e) {
         selectedphoto.nbr = selectedphoto.nbr + 1;
-        NewSelection(selectedphoto.nbr);
+        NewSelection(selectedphoto.nbr, 0);
     });
 
     document.getElementById("prevphbig").addEventListener('click', function(e) {
         selectedphoto.nbr = selectedphoto.nbr - 1;
-        NewSelection(selectedphoto.nbr);
+        NewSelection(selectedphoto.nbr, 0);
     });
 
     document.getElementById("locph").addEventListener('click', function(e) {
-        Long = photoDB[selectedphoto.nbr].Longitude;
-        Lat = photoDB[selectedphoto.nbr].Latitude;
+        Long = photoDB[selectedphoto.nbr].GPSLongitude;
+        Lat = photoDB[selectedphoto.nbr].GPSLatitude;
         Fly(Long, Lat);
     });
 
@@ -439,8 +447,8 @@ function ImgHoverListener() {
     var i;
     for (i = 0; i < 2003; i++) { 
         var ID = "img" + i;
-        Long = photoDB[i].Longitude;
-        Lat = photoDB[i].Latitude;
+        Long = photoDB[i].GPSLongitude;
+        Lat = photoDB[i].GPSLatitude;
         LongLat = Long + ", " + Lat
         document.getElementById(ID).setAttribute('onmouseover', "NewSelectedMapLocation(" + LongLat + ")");
     };
