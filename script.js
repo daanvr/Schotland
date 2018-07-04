@@ -10,7 +10,7 @@ console.log(vh);
 //load json file as static databse and stores the data in the "photoDB" js object
 var photoDB;
 var xmlhttp = new XMLHttpRequest();
-xmlhttp.open("GET", "https://daanvr.github.io/Schotland/photoDB.json", true);
+xmlhttp.open("GET", "https://daanvr.github.io/Schotland/db/photoDB.json", true);
 xmlhttp.send();
 xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) { photoDB = JSON.parse(this.responseText);}
@@ -148,12 +148,14 @@ function NewSelection(newmainphotonbr, movecarousel){
         selectedphoto.DOM.className += " active";
         selectedphoto.imgDOM.style.visibility = 'hidden';
 
+        //Scroll to correct posittion (new version, works well in Chrome less wel in Safary)
+        selectedphoto.DOM.scrollIntoView({behavior: "smooth"});
 
-        //Scroll to correct posittion
-        if (movecarousel == 1) {
-        console.log(movecarousel);        
-            document.getElementById('main-carousel').scrollLeft = selectedphoto.DOM.offsetLeft - 400;
-        }
+                        //Scroll to correct posittion (Old version)
+                        // if (movecarousel == 1) {
+                        // console.log(movecarousel);        
+                        //     document.getElementById('main-carousel').scrollLeft = selectedphoto.DOM.offsetLeft - 400;
+                        // }
 
         //load img info
         var datephotos =        ["",            "20180406",   "20180407",   "20180408",   "20180409",   "20180410",   "20180411",   "20180412",   "20180413",   "20180414",   "20180415",   ""          ];
@@ -287,11 +289,11 @@ function HTMLbtnsClick() {
 function LoadGEOJsonSources() {
     map.addSource('Scotland-Foto', {
         "type": "geojson",
-        "data": "https://daanvr.github.io/Schotland/Scotrip-FotoDataFile-RichOnly-Live.geojson"
+        "data": "https://daanvr.github.io/Schotland/geojson/Scotrip-FotoDataFile-RichOnly-Live.geojson"
     });
     map.addSource('Scotland-Routes', {
         "type": "geojson",
-        "data": "https://daanvr.github.io/Schotland/Routes.geojson"
+        "data": "https://daanvr.github.io/Schotland/geojson/Routes.geojson"
     });
 
     var data = JSON.parse('{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[-5.096936,57.149319]},"properties":{"FileName":"IMG_8571","type":"Foto","FileTypeExtension":"jpg","SourceFile":"/Users/daan/Downloads/Schotlandexpiriment/IMG_8571.JPG","CreateDate":"2018-04-13","CreateTime":"15:15:34","Make":"Apple","Model":"iPhoneSE","ImageSize":"16382x3914","Duration":"","Altitude":"276","URL":"https://farm1.staticflickr.com/823/26804084787_f45be76bc3_o.jpg","URLsmall":"https://farm1.staticflickr.com/823/26804084787_939dd60ebc.jpg"}}]}');
@@ -419,12 +421,12 @@ function ClickbleMapItemCursor(){
 
 
 function AddMapIcon() {
-    map.loadImage('https://daanvr.github.io/Schotland/imgs/photo.png', function(error, image) {
+    map.loadImage('https://daanvr.github.io/Schotland/img/photo.png', function(error, image) {
         if (error) throw error;
         map.addImage('CustomPhoto', image);
     });
 
-    map.loadImage('https://daanvr.github.io/Schotland/imgs/photo-selected.png', function(error, image) {
+    map.loadImage('https://daanvr.github.io/Schotland/img/photo-selected.png', function(error, image) {
         if (error) throw error;
         map.addImage('CustomPhotoSelected', image);
     });
