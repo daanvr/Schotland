@@ -220,8 +220,7 @@ function searchphotoDB(searchquery){
 
 //loads all imgs in carousel
 function LoadCarouselImgs(){
-        var i;
-    for (i = 0; i < photoDB.length; i++) { 
+    for ( var i = 0, phs = photoDB.length; i < phs; i++) { 
         var newdiv = document.createElement('div');
         var position = i;
         newdiv.className = 'carousel-containter img' + position;
@@ -230,7 +229,6 @@ function LoadCarouselImgs(){
         idname = "img" + position;
         newdiv.setAttribute("id", idname);
         document.getElementById('main-carousel').appendChild(newdiv);
-        //console.log(i)
     };
 }
 
@@ -421,12 +419,12 @@ function ClickbleMapItemCursor(){
 
 
 function AddMapIcon() {
-    map.loadImage('https://daanvr.github.io/Schotland/photo.png', function(error, image) {
+    map.loadImage('https://daanvr.github.io/Schotland/img/photo.png', function(error, image) {
         if (error) throw error;
         map.addImage('CustomPhoto', image);
     });
 
-    map.loadImage('https://daanvr.github.io/Schotland/photo-selected.png', function(error, image) {
+    map.loadImage('https://daanvr.github.io/Schotland/img/photo-selected.png', function(error, image) {
         if (error) throw error;
         map.addImage('CustomPhotoSelected', image);
     });
