@@ -419,12 +419,12 @@ function ClickbleMapItemCursor(){
 
 
 function AddMapIcon() {
-    map.loadImage('https://daanvr.github.io/Schotland/img/photo.png', function(error, image) {
+    map.loadImage('https://daanvr.github.io/Schotland/imgs/photo.png', function(error, image) {
         if (error) throw error;
         map.addImage('CustomPhoto', image);
     });
 
-    map.loadImage('https://daanvr.github.io/Schotland/img/photo-selected.png', function(error, image) {
+    map.loadImage('https://daanvr.github.io/Schotland/imgs/photo-selected.png', function(error, image) {
         if (error) throw error;
         map.addImage('CustomPhotoSelected', image);
     });
