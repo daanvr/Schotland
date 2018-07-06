@@ -16,6 +16,7 @@ xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) { photoDB = JSON.parse(this.responseText);}
 };
 
+
 //Mapbox initalisation
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGFhbnZyIiwiYSI6ImNpdTJmczN3djAwMHEyeXBpNGVndWtuYXEifQ.GYZf7r9gTfQL3W-GpmmJ3A';
 var map = new mapboxgl.Map({
@@ -109,7 +110,7 @@ function NewSelection(newmainphotonbr, movecarousel){
         //set slider to all days
         var SliderValue = 0;
         document.getElementById('slider-start').value = SliderValue;
-        filterBy(SliderValue);
+        //filterBy(SliderValue);
 
         //copie varibles from previously selected phototo new var
         previouslyselectedphoto = selectedphoto
@@ -406,7 +407,7 @@ function DisplayGEOJsonLayers(){
             "icon-opacity": 1
         }
     }, 'country-label-lg');
-    ClickbleMapItemCursor(); //Now that the layers a loaded, have the mouse cursor change when hovering some of the layers
+    //ClickbleMapItemCursor(); //Now that the layers a loaded, have the mouse cursor change when hovering some of the layers
     NewSelectedMapLocation();
 
 };
@@ -454,8 +455,37 @@ function ImgHoverListener() {
     };
 };
 
+// Create a popup, but don't add it to the map yet.
+var popup = new mapboxgl.Popup({
+    closeButton: false
+});
 
+map.on('mousemove','photos' , function(e) {//Code snippet used to populate the infor box with data about the layer
+    map.getCanvas().style.cursor = 'pointer';// Change the cursor style as a UI indicator.
+    var HoverdData = e.features[0];// Single out the first found feature.
+    //hoverinfobox.innerHTML = '';//remove exiting html from top left infobox
+    
+    //populting the top left infobox
+    //hoverinfobox.innerHTML = '<h3><strong>' + "Data" + '</strong></h3><p>6:00: ' + HoverdData.properties.load6 + '</p>10:00: ' + HoverdData.properties.load10 + '</p><p>18:00: ' + HoverdData.properties.load18 + '</p><p>20:00: ' + HoverdData.properties.load20 + '</p><p>23:00: ' + HoverdData.properties.load23 + '</p>';
+    //hoverinfobox.style.display = 'block';//unhide popup
+    
+    var features = map.queryRenderedFeatures(e.point, {});
+    if (!features.length) {return;}
+    var feature = features[0];
+    console.log(feature.properties.URLsmall);
 
+    popup.setLngLat(e.lngLat)// Display a popup with the name of the county
+      .setHTML(
+        "<img class='hoverimg' src=" + feature.properties.URLsmall + ">"
+        )
+      .addTo(map);
+});
+
+map.on('mouseleave', 'photos', function() {
+    map.getCanvas().style.cursor = '';//reove "specil" cursor style
+    //hoverinfobox.style.display = 'none';//hide top left infobox
+    popup.remove();//hide popup
+});
 
 
 
