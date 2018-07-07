@@ -8,7 +8,6 @@ console.log(vw);
 console.log(vh);
 
 //load json file as static databse and stores the data in the "photoDB" js object
-var photoDB;
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET", "https://daanvr.github.io/Schotland/db/photoDB.json", true);
 xmlhttp.send();
@@ -121,8 +120,8 @@ function NewSelection(newmainphotonbr, movecarousel){
         selectedphoto.imgid = "imgID" + selectedphoto.nbr;
         selectedphoto.DOM = document.getElementById(selectedphoto.htmlid);
         selectedphoto.imgDOM = document.getElementById(selectedphoto.imgid);
-        selectedphoto.imgurls = photoDB[selectedphoto.nbr].imgurls;
-        selectedphoto.Imgurlb = photoDB[selectedphoto.nbr].Imgurlb;
+        selectedphoto.imgurls = photoDB[selectedphoto.nbr].s_url;
+        selectedphoto.Imgurlb = photoDB[selectedphoto.nbr].original_url;
         selectedphoto.latitude = photoDB[selectedphoto.nbr].GPSLatitude;
         selectedphoto.longitude = photoDB[selectedphoto.nbr].GPSLongitude;
 
@@ -209,16 +208,25 @@ function writephotovars(){
     console.log(selectedphoto);
 };
 
+
 // funciton to search the phtoo database for the picure corresponding to the clicked map icone corresponging to a specific img.
 function searchphotoDB(searchquery){
     //console.log("searching")
-    for (i = 0; i < 2003; i++) {
-        var a = photoDB[i].FileName;
-        if (a == searchquery) {
-            //console.log(photoDB[i].FileName);
-            NewSelection(photoDB[i-2].nbr, 1);
-        }
-    };
+    console.log(photoDB);
+
+    var test = photoDB.indexOf("GPSLatitude");
+    //console.log(test);
+    document.getElementById("daylable").textContent = test;  //set Day Lable to correct day 
+
+
+
+    // for (i = 0; i < 2003; i++) {
+    //     var a = photoDB[i].FileName;
+    //     if (a == searchquery) {
+    //         //console.log(photoDB[i].FileName);
+    //         NewSelection(photoDB[i-1].nbr, 1);
+    //     }
+    // };
 };
 
 //loads all imgs in carousel
@@ -228,7 +236,7 @@ function LoadCarouselImgs(){
         var position = i;
         newdiv.className = 'carousel-containter img' + position;
         newdiv.Name = i;
-        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ', 0)"  id="imgID' + i + '"src="' + photoDB[i].imgurls + '">';
+        newdiv.innerHTML = '<img class="carousel-img img' + position + '" onclick="NewSelection(' + i + ', 0)"  id="imgID' + i + '"src="' + photoDB[i].s_url + '">';
         idname = "img" + position;
         newdiv.setAttribute("id", idname);
         document.getElementById('main-carousel').appendChild(newdiv);
@@ -472,7 +480,6 @@ map.on('mousemove','photos' , function(e) {//Code snippet used to populate the i
     var features = map.queryRenderedFeatures(e.point, {});
     if (!features.length) {return;}
     var feature = features[0];
-    console.log(feature.properties.URLsmall);
 
     popup.setLngLat(e.lngLat)// Display a popup with the name of the county
       .setHTML(
